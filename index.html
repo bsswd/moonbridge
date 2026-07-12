@@ -2,35 +2,47 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <!-- Block zoom on mobile -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>384400+12cm</title>
+    <meta name="mobile-web-app-capable" content="yes">
+    <title>384400+12 см</title>
     <style>
-        body
-        {
+        * {
             margin: 0;
             padding: 0;
+            box-sizing: border-box;
+        }
+
+        html, body {
+            width: 100%;
+            height: 100%;
             overflow: hidden;
-            background: #050510;
-            height: 100vh;
+            background-color: #000;
+            touch-action: none; /* Отключаем зум и скролл на мобильных */
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        #game-container {
+            width: 100%;
+            height: 100%;
             display: flex;
             justify-content: center;
             align-items: center;
         }
 
-        #game-container
-        {
-            width: 100vw;
-            height: 100vh;
+        canvas {
+            display: block;
+            touch-action: none;
         }
-        
     </style>
-    <!-- Phaser 3.60 -->
-    <script src="https://cdn.jsdelivr.net/npm/phaser@3.60.0/dist/phaser.min.js"></script>
 </head>
 <body>
+    <!-- Контейнер для Phaser -->
     <div id="game-container"></div>
-    <!-- Run game as module -->
-    <script type="module" src="js/main.js"></script>
+
+    <!-- SDK Яндекс Игр (загружается асинхронно) -->
+   <!--  <script src="https://yandex.ru/games/sdk/v2" async></script> -->
+
+    <!-- Точка входа -->
+    <script type="module" src="./js/main.js"></script>
 </body>
 </html>
