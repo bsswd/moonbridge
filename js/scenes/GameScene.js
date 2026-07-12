@@ -48,6 +48,8 @@ export default class GameScene extends Phaser.Scene
         this.heliHovering = false; 
         this.heliHoverTimer = 0; 
         this.heliHoverDuration = 0;
+        this.heliNextHoverTime = 2000 + Math.random() * 2000; 
+
         this.shipDirection = 1;     
         this.shipBaseY = 0;         
         this.shipSpeed = 0;         
@@ -96,7 +98,7 @@ export default class GameScene extends Phaser.Scene
         heliG.fillStyle(0x444444, 1);
         heliG.fillRect(50, 12, 20, 16); // cockpit
         heliG.fillStyle(0xff6600, 1);
-        heliG.fillCircle(15, 30, 6); // rotor
+        heliG.fillCircle(30, 30, 15); // rotor
         heliG.generateTexture('heli', 70, 40);
 
         // Generate ship
@@ -284,6 +286,8 @@ export default class GameScene extends Phaser.Scene
                 this.moon.setScale(0.5);
                 this.moon.setAlpha(0.4);
             }
+
+            if(this.heli) this.heli.setVisible(false);
         }
     }
 
@@ -325,7 +329,6 @@ export default class GameScene extends Phaser.Scene
         }
 
         // Collider for all blocks exept top
-
         
         if (this.physicsBlocks.length > 0)
         {
@@ -630,8 +633,9 @@ export default class GameScene extends Phaser.Scene
                 this.activeBlock.x = this.centerX + offset;
             }
             
-            else if (this.spawnMode === 'heli' && this.heli)
+                        else if (this.spawnMode === 'heli' && this.heli)
             {
+                // Heli mode: fly with random stops
                 if (!this.heliHovering)
                 {
                     const heliX = this.heli.x + this.heliDirection * this.heliSpeed * (delta / 1000);
@@ -644,12 +648,20 @@ export default class GameScene extends Phaser.Scene
                     {
                         this.heliDirection *= -1;
                         this.heli.setFlipX(this.heliDirection === -1);
-                        
-                        if (Math.random() < 0.4)
+                    }
+                    
+                    this.heliHoverTimer += delta;
+                    if (this.heliHoverTimer > this.heliNextHoverTime)
+                    {
+                        if (Math.random() < 0.3)
                         {
                             this.heliHovering = true;
                             this.heliHoverDuration = 400 + Math.random() * 1000; // 0.4 - 1.4 секунды
                             this.heliHoverTimer = 0;
+                        }
+                        else
+                        {
+                            this.heliNextHoverTime = this.heliHoverTimer + 1500 + Math.random() * 1500;
                         }
                     }
                 }
@@ -660,12 +672,14 @@ export default class GameScene extends Phaser.Scene
                     {
                         this.heliHovering = false;
                         this.heliHoverTimer = 0;
+                        this.heliNextHoverTime = 1500 + Math.random() * 1500;
                     }
                 }
             }
 
             else if (this.spawnMode === 'ship' && this.ship)
             {
+                // Ship mode: fly through screen
                 const elapsed = (time - (this.shipSpawnTime || time)) / 1000;
                 const wobble = Math.sin(time * 0.005) * this.shipAmplitude;
                    
