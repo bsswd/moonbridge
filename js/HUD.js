@@ -15,7 +15,7 @@ export class HUD {
         this.distanceText = scene.add.text(20, 20, '', {
             fontSize: '32px',
             fill: '#ffffff',
-            fontFamily: 'Arial',
+            fontFamily: 'Exo2',
         }).setScrollFactor(0);
 
         // Прогресс-бар: фон
@@ -32,7 +32,7 @@ export class HUD {
         this.zoneText = scene.add.text(scene.scale.width - 20, 20, '', {
             fontSize: '24px',
             fill: '#00ffcc',
-            fontFamily: 'Arial',
+            fontFamily: 'Exo2',
         }).setOrigin(1, 0).setScrollFactor(0);
     }
 
