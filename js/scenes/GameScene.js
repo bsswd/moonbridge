@@ -37,9 +37,17 @@ export default class GameScene extends Phaser.Scene
 
         this.spawnMode = 'crane'; // crane or ship
         this.ship = null;
+        this.heli = null;
         this.moon = null;
+
         this.currentZone = 'earth';
 
+        this.heliDirection = 1;
+        this.heliBaseY = 0;
+        this.heliSpeed = 200; 
+        this.heliHovering = false; 
+        this.heliHoverTimer = 0; 
+        this.heliHoverDuration = 0;
         this.shipDirection = 1;     
         this.shipBaseY = 0;         
         this.shipSpeed = 0;         
@@ -81,6 +89,15 @@ export default class GameScene extends Phaser.Scene
         groundG.generateTexture('ground', this.scale.width, 80);
         this.ground = this.physics.add.staticImage(this.centerX, this.scale.height - 40, 'ground');
         this.ground.setDepth(-1);
+
+        // Generate heli
+        const heliG = this.make.graphics({ add: false });
+        heliG.fillStyle(0xcccccc, 1);
+        heliG.fillStyle(0x444444, 1);
+        heliG.fillRect(50, 12, 20, 16); // cockpit
+        heliG.fillStyle(0xff6600, 1);
+        heliG.fillCircle(15, 30, 6); // rotor
+        heliG.generateTexture('heli', 70, 40);
 
         // Generate ship
         const shipG = this.make.graphics({ add: false });
@@ -181,8 +198,8 @@ export default class GameScene extends Phaser.Scene
         const zone = this.getZone();
         const spawnY = this.cameras.main.scrollY + this.SPAWN_OFFSET;
 
-        // Crane or ship
-        if (zone.label === 'earth' || zone.label === 'sky')
+        // Crane or heli or ship
+        if (zone.label === 'earth')
         {
             // Crane mode
             this.spawnMode = 'crane';
@@ -194,6 +211,37 @@ export default class GameScene extends Phaser.Scene
             {
                 this.activeBlock.preFX.addGlow(0x00ffcc, 6, 0, false, 0.1, 6);
             }
+
+            // Hide ship
+            if (this.ship) this.ship.setVisible(false);
+        }
+
+        else if (zone.label === 'sky')
+        {
+            // Heli mode
+            this.spawnMode = 'heli';
+            
+            if(!this.heli)
+            {
+                this.heli = this.add.image(0, 0, 'heli');
+                this.heli.setScale(1.5);
+            }
+
+            this.heli.setVisible(true);
+            
+            this.heliDirection = Math.random() < 0.5 ? 1 : -1;
+            this.heliSpeed = 180 + Math.random() * 80;
+            this.heliBaseY = spawnY;
+            this.heliHovering = false;
+            this.heliHoverTimer = 0;
+            
+            const startX = this.heliDirection === 1 ? -100 : this.scale.width + 100;
+            this.heli.setPosition(startX, this.heliBaseY);
+            this.heli.setFlipX(this.heliDirection === -1);
+
+            this.activeBlock = this.physics.add.image(startX, this.heliBaseY + 50, 'block');
+            this.activeBlock.setImmovable(true);
+            this.activeBlock.body.allowGravity = false;
 
             // Hide ship
             if (this.ship) this.ship.setVisible(false);
@@ -226,7 +274,7 @@ export default class GameScene extends Phaser.Scene
             const startX = this.shipDirection === 1 ? -100 : this.scale.width + 100;
             this.ship.setPosition(startX, this.shipBaseY);
                    
-            this.activeBlock = this.physics.add.image(startX, this.shipBaseY + 100, 'block');
+            this.activeBlock = this.physics.add.image(startX, this.shipBaseY + 200, 'block');
             this.activeBlock.setImmovable(true);
             this.activeBlock.body.allowGravity = false;
 
@@ -581,8 +629,42 @@ export default class GameScene extends Phaser.Scene
                 const offset = Math.sin(time * zone.speed) * zone.swing;
                 this.activeBlock.x = this.centerX + offset;
             }
+            
+            else if (this.spawnMode === 'heli' && this.heli)
+            {
+                if (!this.heliHovering)
+                {
+                    const heliX = this.heli.x + this.heliDirection * this.heliSpeed * (delta / 1000);
+                    this.heli.setPosition(heliX, this.heliBaseY);
+                    this.activeBlock.setPosition(heliX, this.heliBaseY + 50);
 
-            if (this.activeBlock && !this.isDropping && !this.isGameOver && this.spawnMode === 'ship' && this.ship)
+                    const margin = 50;
+                    if ((this.heliDirection === 1 && heliX > this.scale.width - margin) ||
+                        (this.heliDirection === -1 && heliX < margin))
+                    {
+                        this.heliDirection *= -1;
+                        this.heli.setFlipX(this.heliDirection === -1);
+                        
+                        if (Math.random() < 0.4)
+                        {
+                            this.heliHovering = true;
+                            this.heliHoverDuration = 400 + Math.random() * 1000; // 0.4 - 1.4 секунды
+                            this.heliHoverTimer = 0;
+                        }
+                    }
+                }
+                else
+                {
+                    this.heliHoverTimer += delta;
+                    if (this.heliHoverTimer >= this.heliHoverDuration)
+                    {
+                        this.heliHovering = false;
+                        this.heliHoverTimer = 0;
+                    }
+                }
+            }
+
+            else if (this.spawnMode === 'ship' && this.ship)
             {
                 const elapsed = (time - (this.shipSpawnTime || time)) / 1000;
                 const wobble = Math.sin(time * 0.005) * this.shipAmplitude;
