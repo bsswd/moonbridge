@@ -149,6 +149,9 @@ export default class GameScene extends Phaser.Scene
         this.input.on('pointerdown', this.dropBlock, this);
         this.physics.world.setBounds(0, -100000, this.scale.width, 100000 + this.scale.height);
 
+        const initialZone = this.getZone();
+        this.cameras.main.setBackgroundColor(initialZone.color);
+
         this.spawnBlock();
     }
 
