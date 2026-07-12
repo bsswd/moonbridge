@@ -9,19 +9,17 @@ export default class GameScene extends Phaser.Scene
     {
         this.BLOCK_SIZE = 120;
         this.BLOCK_BOUNCE = 0.2;
-        this.SWING_RANGE = 220;
-        this.SWING_SPEED = 0.0025;
+
+        this.MAX_PHYSICS_BLOCKS = 3;   
+        
         this.SPAWN_OFFSET = 200;
         this.CAMERA_TRIGGER = 0.8;
 
-        this.MAX_PHYSICS_BLOCKS = 3;   
-
         this.TOTAL_DISTANCE = 100;                       //384400
-        this.distanceLeft = this.TOTAL_DISTANCE; 
+        this.distanceLeft = this.TOTAL_DISTANCE;
         this.distancePerBlock = 10;                     //???
         this.distanceAchived = 0;                     
 
-        this.score = 0;
         this.blocks = [];
         this.blockGroup = null;
         this.physicsBlocks = []; 
