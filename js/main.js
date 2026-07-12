@@ -1,26 +1,30 @@
 import GameScene from './scenes/GameScene.js';
 
-const config = {
-    type: Phaser.AUTO,        // Автовыбор WebGL или Canvas
+const config =
+{
+    type: Phaser.AUTO,        
     width: 720,
-    height: 1280,             // Портретное соотношение 9:16
-    parent: 'game-container', // Куда вставлять canvas
+    height: 1280,            
+    parent: 'game-container', 
     backgroundColor: '#0b0b1a',
     
-    physics: {
+    physics:
+    {
         default: 'arcade',
-        arcade: {
-            gravity: { y: 1200 }, // Сила тяжести
-            debug: false          // Поставьте true, чтобы видеть физические границы
+        arcade:
+        {
+            gravity: { y: 1200 }, 
+            debug: false          
         }
     },
     
-    scale: {
-        mode: Phaser.Scale.FIT,           // Вписывает игру в экран
-        autoCenter: Phaser.Scale.CENTER_BOTH // Центрирует
+    scale:
+    {
+        mode: Phaser.Scale.FIT,                  
+        autoCenter: Phaser.Scale.CENTER_BOTH    
     },
     
-    scene: [GameScene] // Подключаем нашу сцену
+    scene: [GameScene] 
 };
 
 new Phaser.Game(config);
