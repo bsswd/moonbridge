@@ -11,14 +11,15 @@ export default class GameScene extends Phaser.Scene
         this.BLOCK_BOUNCE = 0.2;
         this.SWING_RANGE = 220;
         this.SWING_SPEED = 0.0025;
-        this.SPAWN_OFFSET = 80;
+        this.SPAWN_OFFSET = 200;
         this.CAMERA_TRIGGER = 0.8;
 
         this.MAX_PHYSICS_BLOCKS = 3;   
 
         this.TOTAL_DISTANCE = 100;                       //384400
         this.distanceLeft = this.TOTAL_DISTANCE; 
-        this.distancePerBlock = 10;                     // ???
+        this.distancePerBlock = 10;                     //???
+        this.distanceAchived = 0;                     
 
         this.score = 0;
         this.blocks = [];
@@ -50,7 +51,7 @@ export default class GameScene extends Phaser.Scene
     getZone()
     {
         if (this.distanceLeft > 50)  return { label: 'earth', name: 'ЗЕМЛЯ', color: '#0b0b1a', swing: 220, speed: 0.0025 };
-        if (this.distanceLeft > 30) return { label: 'atmosphere', name: 'СТРАТОСФЕРА', color: '#1a0b2e', swing: 280, speed: 0.003 };
+        if (this.distanceLeft > 30) return { label: 'atmosphere', name: 'НЕБО', color: '#1a0b2e', swing: 280, speed: 0.003 };
         if (this.distanceLeft > 0) return { label: 'space', name: 'КОСМОС', color: '#050510', swing: 0, speed: 0 };
         return { label: 'moon', name: 'ЛУНА', color: '#0a0a0a', swing: 0, speed: 0 };
     }
@@ -278,7 +279,7 @@ export default class GameScene extends Phaser.Scene
 
         // Collider for all blocks exept top
 
-        /*
+        
         if (this.physicsBlocks.length > 0)
         {
             this.fallingCollider = this.physics.add.collider
@@ -290,7 +291,6 @@ export default class GameScene extends Phaser.Scene
                 this
             );
         }
-        */
 
         // Collision for ground
         this.groundCollider = this.physics.add.collider
@@ -386,6 +386,7 @@ export default class GameScene extends Phaser.Scene
 
         // Update distance
         this.distanceLeft -= this.distancePerBlock;
+        this.distanceAchived +=this.distancePerBlock;
 
         // Check goal
         if (this.distanceLeft <= 0)
@@ -420,7 +421,6 @@ export default class GameScene extends Phaser.Scene
                 oldBlock.body.enable = false;
             }
         }
-
 
         // Update camera
         const triggerLine = this.cameras.main.scrollY + (this.scale.height * this.CAMERA_TRIGGER);
@@ -537,16 +537,26 @@ export default class GameScene extends Phaser.Scene
         const cx = this.scale.width / 2;
         const cy = this.cameras.main.scrollY + this.scale.height / 2;
 
-        this.add.text(cx, cy - 50, 'ИГРА ОКОНЧЕНА', {
-            fontSize: '48px', fill: '#ff4444', fontStyle: 'bold', fontFamily: 'Arial'
+        this.add.text(cx, cy - 50, 'ИГРА ОКОНЧЕНА',
+        {
+            fontSize: '48px',
+            fill: '#ff4444',
+            fontStyle: 'bold',
+            fontFamily: 'Arial'
         }).setOrigin(0.5);
 
-        this.add.text(cx, cy + 20, 'Очки: ' + this.score, {
-            fontSize: '32px', fill: '#ffffff', fontFamily: 'Arial'
+        this.add.text(cx, cy + 20, 'Вы прошли: ' + this.distanceAchived + ' км.',
+        {
+            fontSize: '32px',
+            fill: '#ffffff',
+            fontFamily: 'Arial'
         }).setOrigin(0.5);
 
-        const hint = this.add.text(cx, cy + 80, 'Нажмите для рестарта', {
-            fontSize: '24px', fill: '#aaaaaa', fontFamily: 'Arial'
+        const hint = this.add.text(cx, cy + 80, 'Нажмите для рестарта',
+        {
+            fontSize: '24px',
+            fill: '#aaaaaa',
+            fontFamily: 'Arial'
         }).setOrigin(0.5);
 
         this.tweens.add(
@@ -572,7 +582,6 @@ export default class GameScene extends Phaser.Scene
                 const offset = Math.sin(time * zone.speed) * zone.swing;
                 this.activeBlock.x = this.centerX + offset;
             }
-
 
             if (this.activeBlock && !this.isDropping && !this.isGameOver && this.spawnMode === 'ship' && this.ship)
             {
