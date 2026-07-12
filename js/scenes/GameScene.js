@@ -48,8 +48,8 @@ export default class GameScene extends Phaser.Scene
 
     getZone()
     {
-        if (this.distanceLeft > 50)  return { label: 'earth', name: 'ЗЕМЛЯ', color: '#0b0b1a', swing: 220, speed: 0.0025 };
-        if (this.distanceLeft > 30) return { label: 'atmosphere', name: 'НЕБО', color: '#1a0b2e', swing: 280, speed: 0.003 };
+        if (this.distanceLeft > 50)  return { label: 'earth', name: 'ЗЕМЛЯ', color: '#1414af', swing: 220, speed: 0.0025 };
+        if (this.distanceLeft > 30) return { label: 'sky', name: 'НЕБО', color: '#1a0b2e', swing: 280, speed: 0.003 };
         if (this.distanceLeft > 0) return { label: 'space', name: 'КОСМОС', color: '#050510', swing: 0, speed: 0 };
         return { label: 'moon', name: 'ЛУНА', color: '#0a0a0a', swing: 0, speed: 0 };
     }
@@ -115,10 +115,11 @@ export default class GameScene extends Phaser.Scene
         this.distanceText = this.add.text(20, 20, 'Осталось: ' + this.formatDistance(this.distanceLeft) + ' км',
         { fontSize: '32px', fill: '#ffffff', fontFamily: 'Arial'}).setScrollFactor(0);
 
+        //Progress bar
         this.progressBg = this.add.rectangle(this.scale.width / 2, 70, 400, 12, 0x333333)
             .setScrollFactor(0).setOrigin(0.5);
                
-        this.progressFill = this.add.rectangle(this.scale.width / 2 - 200, 70, 400, 12, 0x00ffcc)
+        this.progressFill = this.add.rectangle(this.scale.width / 2 - 200, 70, 0, 12, 0x00ffcc)
             .setScrollFactor(0).setOrigin(0, 0.5);
 
         // Zone
@@ -181,7 +182,7 @@ export default class GameScene extends Phaser.Scene
         const spawnY = this.cameras.main.scrollY + this.SPAWN_OFFSET;
 
         // Crane or ship
-        if (zone.label === 'earth' || zone.label === 'atmosphere')
+        if (zone.label === 'earth' || zone.label === 'sky')
         {
             // Crane mode
             this.spawnMode = 'crane';
