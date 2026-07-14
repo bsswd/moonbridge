@@ -12,6 +12,8 @@ export class TextureGenerator {
     static generateAll(scene) {
         this.generateBlock(scene);
         this.generateGround(scene, scene.scale.width);
+        //this.generateCrane(scene);
+        scene.load.image(CONFIG.TEXTURES.CRANE, 'assets/images/crane.png');
         this.generateHeli(scene);
         this.generateShip(scene);
         this.generateMoon(scene);
@@ -34,6 +36,15 @@ export class TextureGenerator {
         g.lineStyle(2, 0x00ffcc, 0.3);
         g.strokeRect(0, 0, width, 80);
         g.generateTexture(CONFIG.TEXTURES.GROUND, width, 80);
+    }
+
+    static generateCrane(scene) {
+        const g = scene.make.graphics({ add: false });
+        g.fillStyle(0xffcc00, 1); 
+        g.fillRect(0, 0, 80, 40);
+        g.fillStyle(0x333333, 1); 
+        g.fillRect(60, 10, 20, 20);
+        g.generateTexture(CONFIG.TEXTURES.CRANE, 75, 48);
     }
 
     static generateHeli(scene) {

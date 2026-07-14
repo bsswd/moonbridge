@@ -42,6 +42,7 @@ export const CONFIG = {
     TEXTURES: {
         BLOCK: 'block',
         GROUND: 'ground',
+        CRANE: 'crane',
         HELI: 'heli',
         SHIP: 'ship',
         MOON: 'moon',
