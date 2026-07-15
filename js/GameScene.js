@@ -49,6 +49,15 @@ export default class GameScene extends Phaser.Scene {
         };
     }
 
+    preload() {
+        // Загружаем PNG спрайт крана
+        this.load.image(CONFIG.TEXTURES.CRANE, 'assets/images/crane.png');
+        
+        // В будущем здесь можно загрузить и другие спрайты:
+        // this.load.image(CONFIG.TEXTURES.BLOCK, 'assets/images/block.png');
+        // this.load.image(CONFIG.TEXTURES.HELI, 'assets/images/heli.png');
+    }
+
     create() {
         // 1. Генерация текстур
         TextureGenerator.generateAll(this);
@@ -105,10 +114,17 @@ export default class GameScene extends Phaser.Scene {
         }
         this.activeTransport.activate(spawnY);
 
-        // Создаём активный блок под транспортом
-        const pos = this.activeTransport.update(0, 0);
-        this.activeBlock = new Block(this, pos.x, pos.y + this.activeTransport.getBlockOffsetY());
-
+        
+        // Создаём активный блок под нижней границей транспорта
+        this.activeTransport.update(this.time.now, 0, this.currentZone);
+        const attachPoint = this.activeTransport.getBlockAttachPoint();
+        
+        // Для крана: координаты уже в мировых, просто добавляем отступ
+        const blockX = attachPoint.x;
+        const blockY = attachPoint.y;
+        
+        this.activeBlock = new Block(this, blockX, blockY);
+        
         if (zone.transport === 'crane') {
             this.activeBlock.addGlow();
         }
@@ -386,12 +402,18 @@ export default class GameScene extends Phaser.Scene {
     update(time, delta) {
         // Обновление транспорта и позиции активного блока
         if (this.activeBlock && !this.isDropping && !this.isGameOver && this.activeTransport) {
-            const pos = this.activeTransport.update(time, delta, this.currentZone);
+            this.activeTransport.update(time, delta, this.currentZone);
+            
+            // Получаем точку прикрепления блока (нижняя граница транспорта)
+            const attachPoint = this.activeTransport.getBlockAttachPoint();
+            
+            // Позиционируем блок под нижней границей транспорта
             this.activeBlock.sprite.setPosition(
-                pos.x,
-                pos.y + this.activeTransport.getBlockOffsetY()
+                attachPoint.x,
+                attachPoint.y + 10 // Небольшой отступ, чтобы блок не сливался с транспортом
             );
 
+           
             // Проверка выхода транспорта за границы (для корабля)
             if (this.activeTransport.isOutOfBounds()) {
                 this.gameOver();

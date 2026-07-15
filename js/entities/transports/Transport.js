@@ -35,6 +35,16 @@ export class Transport {
      * @param {number} delta
      * @returns {{x: number, y: number}}
      */
+
+    getBlockAttachPoint() {
+        if (!this.sprite) return { x: 0, y: 0 };
+        
+        return {
+            x: this.sprite.x,
+            y: this.sprite.y + (this.sprite.displayHeight)
+        };
+    }
+
     update(time, delta) {
         throw new Error('Метод update() должен быть реализован в подклассе');
     }
