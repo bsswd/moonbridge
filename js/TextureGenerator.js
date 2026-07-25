@@ -13,8 +13,9 @@ export class TextureGenerator {
         this.generateBlock(scene);
         this.generateGround(scene, scene.scale.width);
         scene.load.image(CONFIG.TEXTURES.CRANE, 'assets/images/crane.png');
-        this.generateHeli(scene);
-        this.generateShip(scene);
+         scene.load.image(CONFIG.TEXTURES.HELI, 'assets/images/heli.png');
+        scene.load.image(CONFIG.TEXTURES.SHIP, 'assets/images/ship.png');
+       
         this.generateMoon(scene);
     }
 
@@ -36,30 +37,7 @@ export class TextureGenerator {
         g.strokeRect(0, 0, width, 80);
         g.generateTexture(CONFIG.TEXTURES.GROUND, width, 80);
     }
-
-
-    static generateHeli(scene) {
-        const g = scene.make.graphics({ add: false });
-        g.fillStyle(0xcccccc, 1);
-        g.fillRect(0, 0, 70, 40);
-        g.fillStyle(0x444444, 1);
-        g.fillRect(50, 12, 20, 16);
-        g.fillStyle(0xff6600, 1);
-        g.fillCircle(30, 30, 15);
-        g.generateTexture(CONFIG.TEXTURES.HELI, 70, 40);
-    }
-
-    static generateShip(scene) {
-        const g = scene.make.graphics({ add: false });
-        g.fillStyle(0xcccccc, 1);
-        g.fillTriangle(0, 20, 50, 0, 50, 40);
-        g.fillStyle(0x444444, 1);
-        g.fillRect(50, 12, 20, 16);
-        g.fillStyle(0xff6600, 1);
-        g.fillCircle(15, 20, 6);
-        g.generateTexture(CONFIG.TEXTURES.SHIP, 70, 40);
-    }
-
+    
     static generateMoon(scene) {
         const g = scene.make.graphics({ add: false });
         g.fillStyle(0xdddddd, 1);

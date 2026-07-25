@@ -52,10 +52,14 @@ export default class GameScene extends Phaser.Scene {
     preload() {
         // Загружаем PNG спрайт крана
         this.load.image(CONFIG.TEXTURES.CRANE, 'assets/images/crane.png');
+         // Загружаем PNG спрайт вертолета
+        this.load.image(CONFIG.TEXTURES.HELI, 'assets/images/heli.png');
+        // Загружаем PNG спрайт корабля
+        this.load.image(CONFIG.TEXTURES.SHIP, 'assets/images/ship.png');
         
         // В будущем здесь можно загрузить и другие спрайты:
         // this.load.image(CONFIG.TEXTURES.BLOCK, 'assets/images/block.png');
-        // this.load.image(CONFIG.TEXTURES.HELI, 'assets/images/heli.png');
+       
     }
 
     create() {

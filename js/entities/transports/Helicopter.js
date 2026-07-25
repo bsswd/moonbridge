@@ -24,7 +24,7 @@ export class Helicopter extends Transport {
 
         if (!this.sprite) {
             this.sprite = this.scene.add.image(0, 0, CONFIG.TEXTURES.HELI);
-            this.sprite.setScale(1.5);
+            this.sprite.setScale(1);
         }
 
         this.direction = randomSign();
