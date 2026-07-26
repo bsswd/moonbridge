@@ -128,6 +128,10 @@ export default class GameScene extends Phaser.Scene {
         );
         this.ground.setDepth(-1);
 
+        // Создание города на фоне
+        this.cityBg = this.add.image(centerX, this.scale.height - 220, CONFIG.TEXTURES.CITY);
+        this.cityBg.setDepth(-2); 
+
         // Базовый блок
         const baseY = this.scale.height - 140;
         const baseBlock = new Block(this, centerX, baseY);
