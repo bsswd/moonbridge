@@ -12,6 +12,12 @@ export class Crane extends Transport {
 
     activate(spawnY) {
         super.activate(spawnY);
+
+        if (!this.sprite) {
+            this.sprite = this.scene.add.image(0, 0, CONFIG.TEXTURES.CRANE);
+            this.sprite.setScale(1);
+        }
+
         this.baseY = spawnY;
     }
 
