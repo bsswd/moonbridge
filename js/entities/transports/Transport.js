@@ -10,6 +10,9 @@ export class Transport {
         this.scene = scene;
         this.sprite = null;
         this.active = false;
+
+        // Расстояние от нижней границы транспорта до центра блока
+        this.blockYOffset = 10; // По умолчанию 10 пикселей
     }
 
     /**
@@ -30,18 +33,30 @@ export class Transport {
     }
 
     /**
-     * Обновляет позицию транспорта и возвращает координаты для блока
-     * @param {number} time
-     * @param {number} delta
+     * Возвращает мировые координаты для спавна блока.
+     * Автоматически определяет, закреплен ли транспорт на экране (scrollFactor === 0)
+     * или движется в игровом мире, и корректирует Y-координату.
+     * 
+     * @param {number} cameraScrollY - Текущая прокрутка камеры
      * @returns {{x: number, y: number}}
      */
 
-    getBlockAttachPoint() {
+    getBlockSpawnPosition(cameraScrollY) {
         if (!this.sprite) return { x: 0, y: 0 };
+
+        // Проверяем, закреплен ли спрайт на экране (как кран)
+        const isScreenFixed = this.sprite.scrollFactorX === 0;
         
+        // Если закреплен, его Y - это экранные координаты. Прибавляем scroll камеры.
+        // Если нет, его Y - это уже мировые координаты.
+        const baseWorldY = isScreenFixed ? (this.sprite.y + cameraScrollY) : this.sprite.y;
+
+        // Вычисляем нижнюю границу спрайта + настраиваемый отступ
+        const attachY = baseWorldY + (this.sprite.displayHeight / 2) + this.blockYOffset;
+
         return {
             x: this.sprite.x,
-            y: this.sprite.y + (this.sprite.displayHeight)
+            y: attachY
         };
     }
 
@@ -56,15 +71,7 @@ export class Transport {
     isOutOfBounds() {
         return false;
     }
-
-    /**
-     * Возвращает Y-координату для подвешенного блока
-     * @returns {number}
-     */
-    getBlockOffsetY() {
-        return 50;
-    }
-
+    
     destroy() {
         if (this.sprite) {
             this.sprite.destroy();
