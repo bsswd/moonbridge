@@ -32,8 +32,7 @@ export class Crane extends Transport {
             this.craneSprite.setDepth(50); 
         }
 
-        this.craneSprite.setPosition(this.currentX, 50);
-
+        this.craneSprite.setPosition(this.currentX, 0);
         this.craneSprite.setVisible(true);
     }
 
@@ -73,7 +72,7 @@ export class Crane extends Transport {
         // Возвращаем координаты, где должен появиться блок
         return { 
             x: craneX, 
-            y: this.baseY 
+            y: this.baseY
         };
     }
 
@@ -93,6 +92,6 @@ export class Crane extends Transport {
     }
 
      getBlockOffsetY() {
-        return 20;
+        return 0;
     }
 }
