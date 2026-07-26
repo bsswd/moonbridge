@@ -21,27 +21,27 @@ export default class GameScene extends Phaser.Scene {
         this.distanceLeft = CONFIG.DISTANCE.TOTAL;
         this.distanceAchived = 0;
         this.currentZone = null;
-        this.backgroundManager = null;
-
+        
         // Сущности
         this.installedBlocks = [];      // уже поставленные блоки
         this.physicsBlocks = [];        // блоки с активной физикой (для оптимизации)
         this.activeBlock = null;        // текущий падающий блок
         this.activeTransport = null;    // текущий транспорт
-
+        
         // Флаги состояния
         this.isGameOver = false;
         this.isDropping = false;
         this.isProcessingLanding = false;
-
+        
         // Коллизии (нужно хранить для очистки)
         this.colliders = [];
-
+        
         // Земля
         this.ground = null;
         this.moon = null;
-
+        
         // Менеджеры
+        this.backgroundManager = null;
         this.audio = new AudioManager();
         this.hud = null;
 
@@ -58,6 +58,10 @@ export default class GameScene extends Phaser.Scene {
         console.log('Начинаем загрузку спрайтов...');
 
         // Загружаем окружение
+        this.load.image(CONFIG.TEXTURES.BG_EARTH, 'assets/images/bg_earth.png');
+        this.load.image(CONFIG.TEXTURES.BG_SKY, 'assets/images/bg_sky.png');
+        this.load.image(CONFIG.TEXTURES.BG_SPACE, 'assets/images/bg_space.png');
+
         this.load.image(CONFIG.TEXTURES.GROUND, 'assets/images/ground.png');
         this.load.image(CONFIG.TEXTURES.CITY, 'assets/images/city.png');
         this.load.image(CONFIG.TEXTURES.MOON, 'assets/images/moon.png');
@@ -353,6 +357,21 @@ export default class GameScene extends Phaser.Scene {
      * Смена игровой зоны
      */
     onZoneChange(zone) {
+        // Меняем фон в зависимости от зоны
+        if (this.backgroundManager) {
+            this.backgroundManager.destroy();
+        }
+        
+        let bgTexture = CONFIG.TEXTURES.BG_EARTH;
+
+        if (zone.label === 'sky') {
+            bgTexture = CONFIG.TEXTURES.BG_SKY;
+        } else if (zone.label === 'space') {
+            bgTexture = CONFIG.TEXTURES.BG_SPACE;
+        }
+        
+        this.backgroundManager = new BackgroundManager(this, bgTexture, -10);
+
         this.cameras.main.setBackgroundColor(zone.color);
         this.audio.play('zone');
 
