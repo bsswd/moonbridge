@@ -68,6 +68,9 @@ export const CONFIG = {
             'block_10',
             'block_11'
         ],
+
+        // UI
+        BAR_FILL: 'bar_fill', 
     },
 
     // Настройки фона
@@ -83,7 +86,7 @@ export const CONFIG = {
         
     // Размеры шрифтов
     FONT_SIZE_SMALL: '32px',
-    FONT_SIZE_MEDIUM: '48px',
+    FONT_SIZE_MEDIUM: '40px',
     FONT_SIZE_LARGE: '72px',
     FONT_SIZE_XLARGE: '112px',
         
@@ -91,6 +94,15 @@ export const CONFIG = {
     COLOR_BLUE: '#1500b4',      
     COLOR_RED: '#c10808',       
     COLOR_GREEN: '#007100fe',
+
+    PROGRESS_BAR: {
+            X: 20,              
+            Y: 100,             
+            WIDTH: 20,         
+            HEIGHT: 1000,       
+            COLOR_BG: 0x333333,
+            COLOR_BORDER: 0x00ffcc, 
+        },
     },
 };
 

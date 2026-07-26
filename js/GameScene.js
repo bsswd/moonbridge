@@ -61,10 +61,10 @@ export default class GameScene extends Phaser.Scene {
         this.load.image(CONFIG.TEXTURES.BG_EARTH, 'assets/images/bg_earth.png');
         this.load.image(CONFIG.TEXTURES.BG_SKY, 'assets/images/bg_sky.png');
         this.load.image(CONFIG.TEXTURES.BG_SPACE, 'assets/images/bg_space.png');
-
         this.load.image(CONFIG.TEXTURES.GROUND, 'assets/images/ground.png');
         this.load.image(CONFIG.TEXTURES.CITY, 'assets/images/city.png');
         this.load.image(CONFIG.TEXTURES.MOON, 'assets/images/moon.png');
+        console.log('Окружение загружено');
 
         // Загружаем блоки  
        if (CONFIG.TEXTURES.BLOCKS && Array.isArray(CONFIG.TEXTURES.BLOCKS)) {
@@ -80,7 +80,6 @@ export default class GameScene extends Phaser.Scene {
         this.load.image(CONFIG.TEXTURES.CRANE, 'assets/images/crane.png');
         this.load.image(CONFIG.TEXTURES.HELI, 'assets/images/heli.png');
         this.load.image(CONFIG.TEXTURES.SHIP, 'assets/images/ship.png');
-        
         console.log('Транспорт загружен');
 
         // Загружаем эффекты
@@ -92,9 +91,11 @@ export default class GameScene extends Phaser.Scene {
                 frameHeight: 128   
             }
         );
-
         console.log('Эффекты загружены');
 
+        // Загружаем UI
+        this.load.image(CONFIG.TEXTURES.BAR_FILL, 'assets/images/bar_fill.png');
+        console.log('UI загружен');
 
         // Обработка ошибок
         this.load.on('loaderror', (file) => {
@@ -107,11 +108,7 @@ export default class GameScene extends Phaser.Scene {
         });
     }
 
-
     create() {
-        // Генерация текстур
-        TextureGenerator.generateAll(this);
-
         // Создание эффекта приземления
          this.anims.create({
             key: 'puff',
