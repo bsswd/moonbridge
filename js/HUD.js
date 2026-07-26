@@ -13,9 +13,9 @@ export class HUD {
 
         // Текст расстояния
         this.distanceText = scene.add.text(20, 20, '', {
-            fontSize: '32px',
-            fill: '#ffffff',
-            fontFamily: 'Exo2',
+            fontSize: CONFIG.UI.FONT_SIZE_MEDIUM,
+            fill: CONFIG.UI.COLOR_BLUE,
+            fontFamily: CONFIG.UI.FONT_FAMILY,
         }).setScrollFactor(0);
 
         // Прогресс-бар: фон
@@ -30,9 +30,9 @@ export class HUD {
 
         // Название зоны
         this.zoneText = scene.add.text(scene.scale.width - 20, 20, '', {
-            fontSize: '24px',
-            fill: '#00ffcc',
-            fontFamily: 'Exo2',
+            fontSize: CONFIG.UI.FONT_SIZE_MEDIUM,
+            fill: CONFIG.UI.COLOR_BLUE,
+            fontFamily: CONFIG.UI.FONT_FAMILY,
         }).setOrigin(1, 0).setScrollFactor(0);
     }
 
