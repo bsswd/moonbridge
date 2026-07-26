@@ -7,6 +7,8 @@ import { Block } from './entities/Block.js';
 import { Crane } from './entities/transports/Crane.js';
 import { Helicopter } from './entities/transports/Helicopter.js';
 import { Ship } from './entities/transports/Ship.js';
+import { Puff } from './effects/Puff.js';
+import { randomRange } from './utils.js';
 
 export default class GameScene extends Phaser.Scene {
     constructor() {
@@ -53,6 +55,9 @@ export default class GameScene extends Phaser.Scene {
         // Показываем, что загрузка началась
         console.log('Начинаем загрузку спрайтов...');
 
+        // Загружаем окружение
+        this.load.image(CONFIG.TEXTURES.MOON, 'assets/images/moon.png');
+
         // Загружаем блоки  
        if (CONFIG.TEXTURES.BLOCKS && Array.isArray(CONFIG.TEXTURES.BLOCKS)) {
             CONFIG.TEXTURES.BLOCKS.forEach(blockKey => {
@@ -70,6 +75,19 @@ export default class GameScene extends Phaser.Scene {
         
         console.log('Транспорт загружен');
 
+
+        this.load.spritesheet(
+            'puff_spritesheet',                    
+            'assets/images/puff_spritesheet.png', 
+            { 
+                frameWidth: 128,   
+                frameHeight: 128   
+            }
+        );
+
+        console.log('Эффекты загружены');
+
+
         // Обработка ошибок
         this.load.on('loaderror', (file) => {
             console.error('НЕ УДАЛОСЬ ЗАГРУЗИТЬ: ${file.key} (${file.src})');
@@ -83,38 +101,50 @@ export default class GameScene extends Phaser.Scene {
 
 
     create() {
-        // 1. Генерация текстур
+        // Генерация текстур
         TextureGenerator.generateAll(this);
 
-        // 2. Инициализация звуков
+        // Создание эффекта приземления
+         this.anims.create({
+            key: 'puff',
+            frames: this.anims.generateFrameNumbers('puff_spritesheet', { 
+                start: 0,   
+                end: 9      
+            }),
+            frameRate: 20,       
+            repeat: 0,           
+            hideOnComplete: true
+        });
+
+        // Инициализация звуков
         this.audio.init(this);
 
-        // 3. Создание земли
+        // Создание земли
         const centerX = this.scale.width / 2;
         this.ground = this.physics.add.staticImage(
             centerX, this.scale.height - 40, CONFIG.TEXTURES.GROUND
         );
         this.ground.setDepth(-1);
 
-        // 4. Базовый блок
+        // Базовый блок
         const baseY = this.scale.height - 140;
         const baseBlock = new Block(this, centerX, baseY);
         this.installedBlocks.push(baseBlock);
         this.physicsBlocks.push(baseBlock);
 
-        // 5. UI
+        // UI
         this.hud = new HUD(this);
 
-        // 6. Настройка мира
+        // Настройка мира
         this.physics.world.setBounds(0, -100000, this.scale.width, 100000 + this.scale.height);
         this.input.on('pointerdown', this.dropBlock, this);
 
-        // 7. Начальная зона
+        // Начальная зона
         this.currentZone = getZoneByDistance(this.distanceLeft);
         this.cameras.main.setBackgroundColor(this.currentZone.color);
         this.hud.update(this.distanceLeft, CONFIG.DISTANCE.TOTAL, this.currentZone.name);
 
-        // 8. Спавн первого блока
+        // Спавн первого блока
         this.spawnBlock();
     }
 
@@ -230,7 +260,6 @@ export default class GameScene extends Phaser.Scene {
     onBlockLanded(fallingSprite, targetSprite) {
         if (this.isGameOver || this.isProcessingLanding) return;
         if (!this.activeBlock || fallingSprite !== this.activeBlock.sprite) return;
-
         
 
         this.isProcessingLanding = true;
@@ -256,6 +285,11 @@ export default class GameScene extends Phaser.Scene {
         this.physicsBlocks.push(fallingBlock);
         this.activeBlock = null;
         this.audio.play('land');
+
+        const effectX = fallingBlock.x + /*(fallingBlock.size/2) + */randomRange(-30, 30);
+        const effectY = fallingBlock.y + (fallingBlock.size/2) + randomRange(-15, 10);
+
+        new Puff(this, effectX, effectY);
 
         // Обновление расстояния
         this.distanceLeft -= CONFIG.DISTANCE.PER_BLOCK;
@@ -345,12 +379,12 @@ export default class GameScene extends Phaser.Scene {
 
         if (!this.moon) {
             this.moon = this.add.image(cx, this.cameras.main.scrollY - 600, CONFIG.TEXTURES.MOON);
-            this.moon.setScale(0.5);
+            this.moon.setScale(0.25);
         }
 
         this.tweens.add({
             targets: this.moon,
-            scale: 1.5,
+            scale: 1,
             alpha: 1,
             y: cy - 100,
             duration: 1500,

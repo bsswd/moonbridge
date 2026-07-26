@@ -11,7 +11,7 @@ export class TextureGenerator {
      */
     static generateAll(scene) {
         this.generateGround(scene, scene.scale.width);
-        this.generateMoon(scene);
+        
     }
 
     static generateGround(scene, width) {
@@ -23,6 +23,7 @@ export class TextureGenerator {
         g.generateTexture(CONFIG.TEXTURES.GROUND, width, 80);
     }
 
+    /*
     static generateMoon(scene) {
         const g = scene.make.graphics({ add: false });
         g.fillStyle(0xdddddd, 1);
@@ -33,4 +34,5 @@ export class TextureGenerator {
         g.fillCircle(100, 140, 15);
         g.generateTexture(CONFIG.TEXTURES.MOON, 200, 200);
     }
+        */
 }
