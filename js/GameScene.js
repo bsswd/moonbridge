@@ -67,7 +67,6 @@ export default class GameScene extends Phaser.Scene {
         this.load.image(CONFIG.TEXTURES.CRANE, 'assets/images/crane.png');
         this.load.image(CONFIG.TEXTURES.HELI, 'assets/images/heli.png');
         this.load.image(CONFIG.TEXTURES.SHIP, 'assets/images/ship.png');
-        this.load.image(CONFIG.TEXTURES.MOON, 'assets/images/moon.png');
         
         console.log('Транспорт загружен');
 
