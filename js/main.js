@@ -1,30 +1,62 @@
-import GameScene from './scenes/GameScene.js';
+import Phaser from 'phaser';
+import GameScene from './GameScene.js';
+import { CONFIG } from './config.js';
 
-const config =
-{
-    type: Phaser.AUTO,        
+/**
+ * Конфигурация движка Phaser
+ */
+const phaserConfig = {
+    type: Phaser.AUTO, // WebGL или Canvas
+    parent: 'game-container',
     width: 720,
-    height: 1280,            
-    parent: 'game-container', 
-    backgroundColor: '#0b0b1a',
-    
-    physics:
-    {
+    height: 1080,
+    backgroundColor: '#000000',
+
+    // Масштабирование под экран
+    scale: {
+        mode: Phaser.Scale.FIT,
+        autoCenter: Phaser.Scale.CENTER_BOTH,
+    },
+
+    // Физика
+    physics: {
         default: 'arcade',
-        arcade:
-        {
-            gravity: { y: 1200 }, 
-            debug: false          
-        }
+        arcade: {
+            gravity: { y: 800 },
+            debug: false, //  true для отладки физики
+        },
     },
-    
-    scale:
-    {
-        mode: Phaser.Scale.FIT,                  
-        autoCenter: Phaser.Scale.CENTER_BOTH    
+
+    // Сцены
+    scene: [GameScene],
+
+    // Отключаем контекстное меню по правому клику
+    input: {
+        mouse: {
+            preventDefaultWheel: true,
+            preventDefaultDown: true,
+        },
+        touch: {
+            capture: true,
+        },
     },
-    
-    scene: [GameScene] 
+
+    // Рендеринг
+    render: {
+        pixelArt: false,
+        antialias: true,
+        roundPixels: true,
+    },
 };
 
-new Phaser.Game(config);
+/**
+ * Запуск игры
+ */
+window.addEventListener('load', () => {
+    const game = new Phaser.Game(phaserConfig);
+
+    // Делаем игру доступной глобально (для отладки в консоли)
+    window.game = game;
+
+    console.log('🚀 Игра "384400+12 см" запущена!');
+});
