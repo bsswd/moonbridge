@@ -56,6 +56,8 @@ export default class GameScene extends Phaser.Scene {
         console.log('Начинаем загрузку спрайтов...');
 
         // Загружаем окружение
+        this.load.image(CONFIG.TEXTURES.GROUND, 'assets/images/ground.png');
+        this.load.image(CONFIG.TEXTURES.CITY, 'assets/images/city.png');
         this.load.image(CONFIG.TEXTURES.MOON, 'assets/images/moon.png');
 
         // Загружаем блоки  

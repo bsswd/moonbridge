@@ -46,8 +46,9 @@ export const CONFIG = {
         SHIP: 'ship',
 
         // Окружение
-        MOON: 'moon',
         GROUND: 'ground',
+        CITY: 'city',
+        MOON: 'moon',
         
         // Массив всех блоков
         BLOCKS: [
