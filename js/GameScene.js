@@ -54,12 +54,11 @@ export default class GameScene extends Phaser.Scene {
         console.log('Начинаем загрузку спрайтов...');
 
         // Загружаем блоки  
-        if (CONFIG.TEXTURES.BLOCKS && Array.isArray(CONFIG.TEXTURES.BLOCKS)) {
-            CONFIG.TEXTURES.BLOCKS.forEach((blockKey) => {
-                const filePath = 'assets/images/${blockKey}.png';
-                this.load.image(blockKey, filePath);
+       if (CONFIG.TEXTURES.BLOCKS && Array.isArray(CONFIG.TEXTURES.BLOCKS)) {
+            CONFIG.TEXTURES.BLOCKS.forEach(blockKey => {
+                this.load.image(blockKey, `assets/images/${blockKey}.png`); 
             });
-            console.log('Загружено блоков: ${CONFIG.TEXTURES.BLOCKS.length}');
+            console.log(`В очередь загрузки добавлено блоков: ${CONFIG.TEXTURES.BLOCKS.length}`);
         } else {
             console.warn('Массив BLOCKS не найден в конфиге!');
         }
