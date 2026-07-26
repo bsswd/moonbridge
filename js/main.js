@@ -8,7 +8,7 @@ WebFont.load({
         urls: ['./assets/fonts/Daneehand.ttf']
     },
     active: () => {
-        console.log('✅ Шрифты загружены, запускаем игру...');
+        console.log('Шрифты загружены');
        
     },
     inactive: () => {
