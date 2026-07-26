@@ -88,7 +88,7 @@ export const CONFIG = {
     FONT_SIZE_SMALL: '32px',
     FONT_SIZE_MEDIUM: '40px',
     FONT_SIZE_LARGE: '72px',
-    FONT_SIZE_XLARGE: '112px',
+    FONT_SIZE_XLARGE: '104px',
         
     // Цвета текста
     COLOR_BLUE: '#1500b4',      
@@ -111,21 +111,21 @@ export const ZONES = [
         label: 'earth',
         name: 'ЗЕМЛЯ',
         color: '#1414af',
-        minDistance: 50,
+        minDistance: 50, // Должно быть 80 000
         transport: 'crane',
     },
     {
         label: 'sky',
         name: 'НЕБО',
         color: '#1a0b2e',
-        minDistance: 30,
+        minDistance: 30, // Должно быть 200 000
         transport: 'heli',
     },
     {
         label: 'space',
         name: 'КОСМОС',
         color: '#050510',
-        minDistance: 0,
+        minDistance: 0, // Должно быть 0
         transport: 'ship',
     },
 ];
