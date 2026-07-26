@@ -9,6 +9,7 @@ import { Helicopter } from './entities/transports/Helicopter.js';
 import { Ship } from './entities/transports/Ship.js';
 import { Puff } from './effects/Puff.js';
 import { randomRange } from './utils.js';
+import { BackgroundManager } from './BackgroundManager.js';
 
 export default class GameScene extends Phaser.Scene {
     constructor() {
@@ -20,26 +21,27 @@ export default class GameScene extends Phaser.Scene {
         this.distanceLeft = CONFIG.DISTANCE.TOTAL;
         this.distanceAchived = 0;
         this.currentZone = null;
-
+        
         // Сущности
         this.installedBlocks = [];      // уже поставленные блоки
         this.physicsBlocks = [];        // блоки с активной физикой (для оптимизации)
         this.activeBlock = null;        // текущий падающий блок
         this.activeTransport = null;    // текущий транспорт
-
+        
         // Флаги состояния
         this.isGameOver = false;
         this.isDropping = false;
         this.isProcessingLanding = false;
-
+        
         // Коллизии (нужно хранить для очистки)
         this.colliders = [];
-
+        
         // Земля
         this.ground = null;
         this.moon = null;
-
+        
         // Менеджеры
+        this.backgroundManager = null;
         this.audio = new AudioManager();
         this.hud = null;
 
@@ -56,6 +58,12 @@ export default class GameScene extends Phaser.Scene {
         console.log('Начинаем загрузку спрайтов...');
 
         // Загружаем окружение
+        this.load.image(CONFIG.TEXTURES.BG_EARTH, 'assets/images/bg_earth.png');
+        this.load.image(CONFIG.TEXTURES.BG_SKY, 'assets/images/bg_sky.png');
+        this.load.image(CONFIG.TEXTURES.BG_SPACE, 'assets/images/bg_space.png');
+
+        this.load.image(CONFIG.TEXTURES.GROUND, 'assets/images/ground.png');
+        this.load.image(CONFIG.TEXTURES.CITY, 'assets/images/city.png');
         this.load.image(CONFIG.TEXTURES.MOON, 'assets/images/moon.png');
 
         // Загружаем блоки  
@@ -75,7 +83,7 @@ export default class GameScene extends Phaser.Scene {
         
         console.log('Транспорт загружен');
 
-
+        // Загружаем эффекты
         this.load.spritesheet(
             'puff_spritesheet',                    
             'assets/images/puff_spritesheet.png', 
@@ -95,7 +103,7 @@ export default class GameScene extends Phaser.Scene {
 
         // Когда всё загрузилось
         this.load.on('complete', () => {
-            console.log('🎉 Все спрайты успешно загружены!');
+            console.log('Все спрайты успешно загружены!');
         });
     }
 
@@ -125,6 +133,13 @@ export default class GameScene extends Phaser.Scene {
             centerX, this.scale.height - 40, CONFIG.TEXTURES.GROUND
         );
         this.ground.setDepth(-1);
+
+        // Создание города на фоне
+        this.cityBg = this.add.image(centerX, this.scale.height - 220, CONFIG.TEXTURES.CITY);
+        this.cityBg.setDepth(-2);
+
+        // Создание тайлового фона
+        this.backgroundManager = new BackgroundManager(this, CONFIG.TEXTURES.BG_EARTH, -10);
 
         // Базовый блок
         const baseY = this.scale.height - 140;
@@ -342,6 +357,21 @@ export default class GameScene extends Phaser.Scene {
      * Смена игровой зоны
      */
     onZoneChange(zone) {
+        // Меняем фон в зависимости от зоны
+        if (this.backgroundManager) {
+            this.backgroundManager.destroy();
+        }
+        
+        let bgTexture = CONFIG.TEXTURES.BG_EARTH;
+
+        if (zone.label === 'sky') {
+            bgTexture = CONFIG.TEXTURES.BG_SKY;
+        } else if (zone.label === 'space') {
+            bgTexture = CONFIG.TEXTURES.BG_SPACE;
+        }
+        
+        this.backgroundManager = new BackgroundManager(this, bgTexture, -10);
+
         this.cameras.main.setBackgroundColor(zone.color);
         this.audio.play('zone');
 
@@ -451,6 +481,11 @@ export default class GameScene extends Phaser.Scene {
      * Главный цикл обновления
      */
     update(time, delta) {
+        //Обновление позиции фона
+        if (this.backgroundManager) {
+            this.backgroundManager.update();
+        }
+
         // Обновление транспорта и позиции активного блока
         if (this.activeBlock && !this.isDropping && !this.isGameOver && this.activeTransport) {
             const pos = this.activeTransport.update(time, delta, this.currentZone);
