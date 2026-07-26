@@ -49,6 +49,41 @@ export default class GameScene extends Phaser.Scene {
         };
     }
 
+    preload() {
+        // Показываем, что загрузка началась
+        console.log('Начинаем загрузку спрайтов...');
+
+        // Загружаем блоки  
+        if (CONFIG.TEXTURES.BLOCKS && Array.isArray(CONFIG.TEXTURES.BLOCKS)) {
+            CONFIG.TEXTURES.BLOCKS.forEach((blockKey) => {
+                const filePath = 'assets/images/${blockKey}.png';
+                this.load.image(blockKey, filePath);
+            });
+            console.log('Загружено блоков: ${CONFIG.TEXTURES.BLOCKS.length}');
+        } else {
+            console.warn('Массив BLOCKS не найден в конфиге!');
+        }
+
+        // Загружаем транспорт
+        this.load.image(CONFIG.TEXTURES.CRANE, 'assets/images/crane.png');
+        this.load.image(CONFIG.TEXTURES.HELI, 'assets/images/heli.png');
+        this.load.image(CONFIG.TEXTURES.SHIP, 'assets/images/ship.png');
+        this.load.image(CONFIG.TEXTURES.MOON, 'assets/images/moon.png');
+        
+        console.log('Транспорт загружен');
+
+        // Обработка ошибок
+        this.load.on('loaderror', (file) => {
+            console.error('НЕ УДАЛОСЬ ЗАГРУЗИТЬ: ${file.key} (${file.src})');
+        });
+
+        // Когда всё загрузилось
+        this.load.on('complete', () => {
+            console.log('🎉 Все спрайты успешно загружены!');
+        });
+    }
+
+
     create() {
         // 1. Генерация текстур
         TextureGenerator.generateAll(this);

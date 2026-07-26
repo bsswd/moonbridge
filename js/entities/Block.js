@@ -2,6 +2,7 @@ import { CONFIG } from '../config.js';
 
 /**
  * Игровой блок моста.
+ * Автоматически выбирает случайную текстуру из списка.
  * Инкапсулирует физику, состояние и визуальное представление.
  */
 export class Block {
@@ -11,17 +12,40 @@ export class Block {
      * @param {number} y
      * @param {string} textureKey
      */
-    constructor(scene, x, y, textureKey = CONFIG.TEXTURES.BLOCK) {
+    constructor(scene, x, y, textureKey = null) {
         this.scene = scene;
-        this.sprite = scene.physics.add.image(x, y, textureKey);
+        
+        // Если текстура не передана, выбираем случайную
+        this.textureKey = textureKey || this.getRandomBlockTexture();
+        
+        // Создаём физический объект
+        this.sprite = scene.physics.add.image(x, y, this.textureKey);
         this.sprite.setImmovable(true);
         this.sprite.body.allowGravity = false;
         this.isLanded = false;
     }
 
+    /**
+     * Выбирает случайный блок из массива
+     * @returns {string} Ключ текстуры
+     */
+    getRandomBlockTexture() {
+        const blocks = CONFIG.TEXTURES.BLOCKS;
+        
+        if (!blocks || blocks.length === 0) {
+            console.warn('Массив блоков пуст! Использую block_01');
+            return 'block_01';
+        }
+        
+        const randomIndex = Math.floor(Math.random() * blocks.length);
+        const selectedBlock = blocks[randomIndex];
+
+        return selectedBlock;
+    }
+
     get x() { return this.sprite.x; }
     get y() { return this.sprite.y; }
-    get size() { return CONFIG.BLOCK.SIZE; }
+    get size() { return this.sprite.displayWidth; }
 
     /**
      * Начинает падение (для активного блока)
