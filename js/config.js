@@ -49,6 +49,10 @@ export const CONFIG = {
         GROUND: 'ground',
         CITY: 'city',
         MOON: 'moon',
+
+        BG_EARTH: 'bg_earth',
+        BG_SKY: 'bg_sky',
+        BG_SPACE: 'bg_space',
         
         // Массив всех блоков
         BLOCKS: [
@@ -65,7 +69,15 @@ export const CONFIG = {
             'block_11'
         ],
     },
+
+    // Настройки фона
+        BACKGROUND: {
+        TILE_HEIGHT: 700,  
+        OVERLAP: 0,        
+        },
 };
+
+
 
 export const ZONES = [
     {
