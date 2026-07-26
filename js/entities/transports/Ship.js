@@ -20,7 +20,7 @@ export class Ship extends Transport {
 
         if (!this.sprite) {
             this.sprite = this.scene.add.image(0, 0, CONFIG.TEXTURES.SHIP);
-            this.sprite.setScale(1.5);
+            this.sprite.setScale(0.7);
         }
 
         this.direction = randomSign();
@@ -58,6 +58,6 @@ export class Ship extends Transport {
     }
 
     getBlockOffsetY() {
-        return 50;
+        return 180;
     }
 }

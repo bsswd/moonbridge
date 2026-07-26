@@ -32,4 +32,8 @@ export class Crane extends Transport {
     deactivate() {
         super.deactivate();
     }
+
+    getBlockOffsetY() {
+        return 20;
+    }
 }
