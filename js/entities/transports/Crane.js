@@ -92,6 +92,6 @@ export class Crane extends Transport {
     }
 
      getBlockOffsetY() {
-        return 0;
+        return -20;
     }
 }
