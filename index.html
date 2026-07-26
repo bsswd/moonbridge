@@ -35,8 +35,15 @@
         }
 
         @font-face {
-        font-family: 'Exo2';
+        font-family: 'Exo2-Bold';
         src: url('./assets/fonts/Exo2-Bold.ttf') format('truetype');
+        font-weight: normal;
+        font-style: normal;
+        }
+
+        @font-face {
+        font-family: 'Daneehand';
+        src: url('./assets/fonts/Daneehand.ttf') format('truetype');
         font-weight: normal;
         font-style: normal;
         }
@@ -48,6 +55,11 @@
 
     <!-- SDK Яндекс Игр (загружается асинхронно) -->
    <!--  <script src="https://yandex.ru/games/sdk/v2" async></script> -->
+
+    <!-- WebFontLoader -->
+    <script src="https://ajax.googleapis.com/ajax/libs/webfont/1.6.26/webfont.js"></script>
+    
+
 
     <!-- Точка входа -->
     <script type="module" src="./js/main.js"></script>

@@ -379,10 +379,10 @@ export default class GameScene extends Phaser.Scene {
         const cy = this.cameras.main.scrollY + this.scale.height * 0.4;
 
         const text = this.add.text(cx, cy, zone.name, {
-            fontSize: '56px',
-            fill: '#ffffff',
+            fontSize: CONFIG.UI.FONT_SIZE_XLARGE,
+            fill: CONFIG.UI.COLOR_BLUE,
             fontStyle: 'bold',
-            fontFamily: 'Exo2',
+            fontFamily: CONFIG.UI.FONT_FAMILY,
         }).setOrigin(0.5).setAlpha(0);
 
         this.tweens.add({
@@ -422,16 +422,16 @@ export default class GameScene extends Phaser.Scene {
         });
 
         this.time.delayedCall(1600, () => {
-            this.add.text(cx, cy - 80, 'ЛУНА ДОСТИГНУТА!', {
-                fontSize: '52px', fill: '#00ffcc', fontStyle: 'bold', fontFamily: 'Exo2',
+            this.add.text(cx, cy - 80, 'А ВОТ И ЛУНА!', {
+                fontSize: CONFIG.UI.FONT_SIZE_XLARGE, fill: CONFIG.UI.COLOR_GREEN, fontStyle: 'bold', fontFamily: CONFIG.UI.FONT_FAMILY,
             }).setOrigin(0.5);
 
             this.add.text(cx, cy, 'Вы преодолели 384 400 км. +/- 12 см.', {
-                fontSize: '32px', fill: '#ffffff', fontFamily: 'Exo2',
+                fontSize: CONFIG.UI.FONT_SIZE_MEDIUM, fill: CONFIG.UI.COLOR_BLUE, fontFamily: CONFIG.UI.FONT_FAMILY,
             }).setOrigin(0.5);
 
             const hint = this.add.text(cx, cy + 60, 'Нажмите для рестарта', {
-                fontSize: '24px', fill: '#aaaaaa', fontFamily: 'Exo2',
+                fontSize: CONFIG.UI.FONT_SIZE_SMALL, fill: CONFIG.UI.COLOR_BLUE, fontFamily: CONFIG.UI.FONT_FAMILY,
             }).setOrigin(0.5);
 
             this.tweens.add({
@@ -459,15 +459,15 @@ export default class GameScene extends Phaser.Scene {
         const cy = this.cameras.main.scrollY + this.scale.height / 2;
 
         this.add.text(cx, cy - 50, 'ИГРА ОКОНЧЕНА', {
-            fontSize: '48px', fill: '#ff4444', fontStyle: 'bold', fontFamily: 'Exo2',
+            fontSize: CONFIG.UI.FONT_SIZE_XLARGE, fill: CONFIG.UI.COLOR_RED, fontStyle: 'bold', fontFamily: CONFIG.UI.FONT_FAMILY,
         }).setOrigin(0.5);
 
         this.add.text(cx, cy + 20, `Вы прошли: ${this.distanceAchived} км.`, {
-            fontSize: '32px', fill: '#ffffff', fontFamily: 'Exo2',
+            fontSize: CONFIG.UI.FONT_SIZE_MEDIUM, fill: CONFIG.UI.COLOR_BLUE, fontFamily: CONFIG.UI.FONT_FAMILY,
         }).setOrigin(0.5);
 
         const hint = this.add.text(cx, cy + 80, 'Нажмите для рестарта', {
-            fontSize: '24px', fill: '#aaaaaa', fontFamily: 'Exo2',
+            fontSize: CONFIG.UI.FONT_SIZE_SMALL, fill: CONFIG.UI.COLOR_BLUE, fontFamily: CONFIG.UI.FONT_FAMILY,
         }).setOrigin(0.5);
 
         this.tweens.add({

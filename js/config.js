@@ -75,9 +75,24 @@ export const CONFIG = {
         TILE_HEIGHT: 700,  
         OVERLAP: 0,        
         },
+
+    UI: {
+    // Шрифты
+    FONT_FAMILY: '"Daneehand"', 
+    FONT_FAMILY_BOLD: '"Exo2-Bold"',
+        
+    // Размеры шрифтов
+    FONT_SIZE_SMALL: '32px',
+    FONT_SIZE_MEDIUM: '48px',
+    FONT_SIZE_LARGE: '72px',
+    FONT_SIZE_XLARGE: '112px',
+        
+    // Цвета текста
+    COLOR_BLUE: '#1500b4',      
+    COLOR_RED: '#c10808',       
+    COLOR_GREEN: '#007100fe',
+    },
 };
-
-
 
 export const ZONES = [
     {

@@ -2,6 +2,22 @@ import Phaser from 'phaser';
 import GameScene from './GameScene.js';
 import { CONFIG } from './config.js';
 
+WebFont.load({
+    custom: {
+        families: ['Daneehand'],
+        urls: ['./assets/fonts/Daneehand.ttf']
+    },
+    active: () => {
+        console.log('✅ Шрифты загружены, запускаем игру...');
+       
+    },
+    inactive: () => {
+        console.warn('Шрифты не загрузились, используем системные');
+        
+    }
+});
+
+
 /**
  * Конфигурация движка Phaser
  */
