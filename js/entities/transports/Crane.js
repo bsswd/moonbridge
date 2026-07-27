@@ -20,7 +20,7 @@ export class Crane extends Transport {
             this.craneSprite = this.scene.add.image(0, 0, CONFIG.TEXTURES.CRANE);
 
             // Масштаб 1.5
-            this.craneSprite.setScale(0.6);
+            this.craneSprite.setScale(1);
             
             // Точка привязки: верхний центр спрайта
             this.craneSprite.setOrigin(0.5, 0); 

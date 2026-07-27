@@ -62,7 +62,6 @@ export default class GameScene extends Phaser.Scene {
         this.load.image(CONFIG.TEXTURES.BG_SKY, 'assets/images/bg_sky.png');
         this.load.image(CONFIG.TEXTURES.BG_SPACE, 'assets/images/bg_space.png');
         this.load.image(CONFIG.TEXTURES.GROUND, 'assets/images/ground.png');
-        this.load.image(CONFIG.TEXTURES.CITY, 'assets/images/city.png');
         this.load.image(CONFIG.TEXTURES.MOON, 'assets/images/moon.png');
         console.log('Окружение загружено');
 
@@ -130,11 +129,7 @@ export default class GameScene extends Phaser.Scene {
             centerX, this.scale.height - 40, CONFIG.TEXTURES.GROUND
         );
         this.ground.setDepth(-1);
-
-        // Создание города на фоне
-        this.cityBg = this.add.image(centerX, this.scale.height - 220, CONFIG.TEXTURES.CITY);
-        this.cityBg.setDepth(-2);
-
+        
         // Создание тайлового фона
         this.backgroundManager = new BackgroundManager(this, CONFIG.TEXTURES.BG_EARTH, -10);
 
