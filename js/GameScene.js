@@ -114,7 +114,7 @@ export default class GameScene extends Phaser.Scene {
             key: 'puff',
             frames: this.anims.generateFrameNumbers('puff_spritesheet', { 
                 start: 0,   
-                end: 9      
+                end: 6      
             }),
             frameRate: 20,       
             repeat: 0,           

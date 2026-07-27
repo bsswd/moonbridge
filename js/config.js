@@ -58,7 +58,9 @@ export const CONFIG = {
         BLOCKS: [
             'block_01',
             'block_02',
-            'block_03',
+            'block_03'
+            
+            /*,
             'block_04',
             'block_05',
             'block_06',
@@ -67,6 +69,7 @@ export const CONFIG = {
             'block_09',
             'block_10',
             'block_11'
+            */
         ],
 
         // UI
@@ -91,7 +94,7 @@ export const CONFIG = {
     FONT_SIZE_XLARGE: '104px',
         
     // Цвета текста
-    COLOR_BLUE: '#1500b4',      
+    COLOR_BLUE: '#130B60',      
     COLOR_RED: '#c10808',       
     COLOR_GREEN: '#007100fe',
 
