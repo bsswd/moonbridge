@@ -75,7 +75,7 @@ export const CONFIG = {
 
     // Настройки фона
         BACKGROUND: {
-        TILE_HEIGHT: 700,  
+        TILE_HEIGHT: 2100,  
         OVERLAP: 0,        
         },
 

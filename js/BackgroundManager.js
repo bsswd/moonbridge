@@ -27,7 +27,7 @@ export class BackgroundManager {
         const centerX = this.scene.scale.width / 2;
         
         // Создаём 3-4 тайла, чтобы покрыть экран с запасом
-        const tileCount = 5;
+        const tileCount = 2;
         
         for (let i = 0; i < tileCount; i++) {
             const tile = this.scene.add.image(
