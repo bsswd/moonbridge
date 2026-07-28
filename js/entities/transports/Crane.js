@@ -62,7 +62,7 @@ export class Crane extends Transport {
         const centerX = this.scene.scale.width / 2;
         const offset = Math.sin(time * CONFIG.CRANE.SPEED) * CONFIG.CRANE.SWING;
         const craneX = centerX + offset;
-        const craneY = 0; // Отступ от самого верха экрана
+        const craneY = -10; // Отступ от самого верха экрана
 
         // Обновляем позицию крана
         if (this.craneSprite) {
@@ -92,6 +92,6 @@ export class Crane extends Transport {
     }
 
      getBlockOffsetY() {
-        return -20;
+        return 0;
     }
 }

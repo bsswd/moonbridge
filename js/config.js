@@ -58,12 +58,11 @@ export const CONFIG = {
         BLOCKS: [
             'block_01',
             'block_02',
-            'block_03'
-            
-            /*,
+            'block_03',
             'block_04',
             'block_05',
             'block_06',
+            /*
             'block_07',
             'block_08',
             'block_09',
