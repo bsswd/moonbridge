@@ -36,21 +36,23 @@ export class Crane extends Transport {
         this.craneSprite.setVisible(true);
     }
 
+    /*
     getBlockAttachPoint() {
         // Кран закреплён на экране на Y=50
         // Чтобы получить мировую координату, нужно добавить scrollY камеры
         const cameraScrollY = this.scene.cameras.main.scrollY;
-        const craneScreenY = 50; // Позиция крана на экране
-        const craneWorldY = craneScreenY + cameraScrollY;
+        const craneScreenY = 0; // Позиция крана на экране
+        const craneWorldY = craneScreenY; //+ cameraScrollY;
         
         // Нижняя граница крана в мировых координатах
-        const craneBottom = craneWorldY + (this.craneSprite.displayHeight);
+        const craneBottom = craneWorldY; //+ (this.craneSprite.displayHeight);
         
         return {
             x: this.craneSprite.x,
             y: craneBottom
         };
     }
+        */
 
     /**
      * @param {number} time
@@ -69,11 +71,13 @@ export class Crane extends Transport {
             this.craneSprite.setPosition(craneX, craneY);
         }
 
+        
         // Возвращаем координаты, где должен появиться блок
         return { 
             x: craneX, 
-            y: this.baseY
+            y: craneY
         };
+        
     }
 
     deactivate() {

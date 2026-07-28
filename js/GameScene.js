@@ -115,7 +115,7 @@ export default class GameScene extends Phaser.Scene {
                 start: 0,   
                 end: 6      
             }),
-            frameRate: 20,       
+            frameRate: 12,       
             repeat: 0,           
             hideOnComplete: true
         });
