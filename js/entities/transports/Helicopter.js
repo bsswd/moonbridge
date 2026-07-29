@@ -11,6 +11,7 @@ export class Helicopter extends Transport {
         this.direction = 1;
         this.speed = 0;
         this.baseY = 0;
+        this.blockGap = -20;
 
         // Состояние зависания
         this.isHovering = false;
@@ -85,9 +86,5 @@ export class Helicopter extends Transport {
             x: this.sprite.x,
             y: this.baseY,
         };
-    }
-
-    getBlockOffsetY() {
-        return 120;
     }
 }

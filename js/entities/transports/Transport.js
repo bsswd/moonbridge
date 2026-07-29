@@ -1,3 +1,5 @@
+import { CONFIG } from "../../config";
+
 /**
  * Базовый класс для транспорта (Crane, Helicopter, Ship).
  * Использует паттерн "Стратегия" — сцена не знает деталей движения.
@@ -10,6 +12,7 @@ export class Transport {
         this.scene = scene;
         this.sprite = null;
         this.active = false;
+         this.blockGap = - 10; 
     }
 
     /**
@@ -46,13 +49,14 @@ export class Transport {
     isOutOfBounds() {
         return false;
     }
-
-    /**
-     * Возвращает Y-координату для подвешенного блока
-     * @returns {number}
-     */
-    getBlockOffsetY() {
-        return 50;
+  
+     getBlockSpawnPosition() {
+        if (!this.sprite) return { x: 0, y: 0 };
+        
+        return {
+            x: this.sprite.x,
+            y: this.sprite.y + this.sprite.displayHeight + this.blockGap
+        };
     }
 
     destroy() {

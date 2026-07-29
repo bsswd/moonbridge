@@ -13,6 +13,7 @@ export class Ship extends Transport {
         this.baseY = 0;
         this.amplitude = 0;
         this.spawnTime = 0;
+        this.blockGap = -50;
     }
 
     activate(spawnY) {
@@ -55,9 +56,5 @@ export class Ship extends Transport {
         const margin = 150;
         return (this.direction === 1 && this.sprite.x > this.scene.scale.width + margin) ||
                (this.direction === -1 && this.sprite.x < -margin);
-    }
-
-    getBlockOffsetY() {
-        return 180;
     }
 }

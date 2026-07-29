@@ -31,12 +31,14 @@ export const CONFIG = {
         HOVER_DURATION_MAX: 1400,
         NEXT_HOVER_MIN: 1500,
         NEXT_HOVER_MAX: 3000,
+        SPAWN_OFFSET: -18,
     },
     SHIP: {
         SPEED_MIN: 180,
         SPEED_MAX: 300,
         AMPLITUDE_MIN: 30,
         AMPLITUDE_MAX: 70,
+        SPAWN_OFFSET: -20,
     },
 
     TEXTURES: {

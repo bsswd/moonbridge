@@ -2,82 +2,68 @@ import { Transport } from './Transport.js';
 import { CONFIG } from '../../config.js';
 
 /**
- * Кран — раскачивается по синусоиде (зона "Земля")
- * Использует загруженный PNG-спрайт.
+ * Кран: жёстко закреплён вверху экрана, раскачивается.
+ * Блок спавнится строго под нижней границей спрайта.
  */
 export class Crane extends Transport {
     constructor(scene) {
         super(scene);
         this.craneSprite = null;
+        this.currentX = scene.scale.width / 2;
+        
+        // Расстояние от ВЕРХНЕГО края экрана до верха крана
+        this.SCREEN_Y = -10; 
     }
 
     activate(spawnY) {
         super.activate(spawnY);
-        this.baseY = spawnY;
 
-        // Создаём спрайт крана, если его ещё нет
         if (!this.craneSprite) {
             this.craneSprite = this.scene.add.image(0, 0, CONFIG.TEXTURES.CRANE);
-
-            // Масштаб 1.5
+            
             this.craneSprite.setScale(1);
-            
-            // Точка привязки: верхний центр спрайта
             this.craneSprite.setOrigin(0.5, 0); 
-            
-            // Фиксируем на экране, чтобы он не уезжал вместе с камерой вниз
-            this.craneSprite.setScrollFactor(0); 
-            
-            // Рисуем поверх блоков (depth 50), но под UI (depth 100+)
-            this.craneSprite.setDepth(50); 
+            this.craneSprite.setScrollFactor(0);
+            this.craneSprite.setDepth(50);
         }
 
-        this.craneSprite.setPosition(this.currentX, 0);
+        this.craneSprite.setPosition(this.currentX, this.SCREEN_Y);
         this.craneSprite.setVisible(true);
     }
 
-    /*
-    getBlockAttachPoint() {
-        // Кран закреплён на экране на Y=50
-        // Чтобы получить мировую координату, нужно добавить scrollY камеры
+        getBlockSpawnPosition() {
+        if (!this.craneSprite) {
+            return { x: this.scene.scale.width / 2, y: 100 };
+        }
+
         const cameraScrollY = this.scene.cameras.main.scrollY;
-        const craneScreenY = 0; // Позиция крана на экране
-        const craneWorldY = craneScreenY; //+ cameraScrollY;
-        
-        // Нижняя граница крана в мировых координатах
-        const craneBottom = craneWorldY; //+ (this.craneSprite.displayHeight);
-        
+        const craneWorldY = this.craneSprite.y + cameraScrollY;
+        const craneBottom = craneWorldY + this.craneSprite.displayHeight;
+       
+        const gap = 50;
+
         return {
-            x: this.craneSprite.x,
-            y: craneBottom
+            x: this.currentX,
+            y: craneBottom + gap
         };
     }
-        */
-
-    /**
-     * @param {number} time
-     * @param {number} delta
-     * @param {object} zoneConfig - параметры зоны (swing, speed)
-     */
 
     update(time, delta, zoneConfig) {
         const centerX = this.scene.scale.width / 2;
-        const offset = Math.sin(time * CONFIG.CRANE.SPEED) * CONFIG.CRANE.SWING;
-        const craneX = centerX + offset;
-        const craneY = -10; // Отступ от самого верха экрана
+        const speed = zoneConfig?.speed || CONFIG.CRANE.SPEED;
+        const swing = zoneConfig?.swing || CONFIG.CRANE.SWING;
 
-        // Обновляем позицию крана
+        const offset = Math.sin(time * speed) * swing;
+        this.currentX = centerX + offset;
+
         if (this.craneSprite) {
-            this.craneSprite.setPosition(craneX, craneY);
+            this.craneSprite.setPosition(this.currentX, this.SCREEN_Y);
         }
 
-        
-        // Возвращаем координаты, где должен появиться блок
         return { 
-            x: craneX, 
-            y: craneY
+            x: this.currentX, 
+            y: this.baseY 
         };
-        
     }
 
     deactivate() {
@@ -93,9 +79,5 @@ export class Crane extends Transport {
             this.craneSprite.destroy();
             this.craneSprite = null;
         }
-    }
-
-     getBlockOffsetY() {
-        return 0;
     }
 }

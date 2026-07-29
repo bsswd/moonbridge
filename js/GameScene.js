@@ -168,17 +168,22 @@ export default class GameScene extends Phaser.Scene {
         const zone = getZoneByDistance(this.distanceLeft);
         const spawnY = this.cameras.main.scrollY + CONFIG.CAMERA.SPAWN_OFFSET;
 
-        // Создаём/активируем нужный транспорт
+        // Создаём/активируем транспорт
         if (!this.activeTransport || this.activeTransport.constructor.name.toLowerCase() !== zone.transport) {
             if (this.activeTransport) this.activeTransport.destroy();
             this.activeTransport = this.transportFactories[zone.transport]();
         }
         this.activeTransport.activate(spawnY);
 
-        // Создаём активный блок под транспортом
-        const pos = this.activeTransport.update(0, 0);
-        this.activeBlock = new Block(this, pos.x, pos.y + this.activeTransport.getBlockOffsetY());
+        // Обновляем позицию транспорта
+        this.activeTransport.update(this.time.now, 0, this.currentZone);
+        
+        // 🎯 ВЫЗОВ БЕЗ АРГУМЕНТОВ
+        const spawnPos = this.activeTransport.getBlockSpawnPosition();
 
+        // Создаём блок
+        this.activeBlock = new Block(this, spawnPos.x, spawnPos.y);
+        
         if (zone.transport === 'crane') {
             this.activeBlock.addGlow();
         }
@@ -480,13 +485,13 @@ export default class GameScene extends Phaser.Scene {
 
         // Обновление транспорта и позиции активного блока
         if (this.activeBlock && !this.isDropping && !this.isGameOver && this.activeTransport) {
-            const pos = this.activeTransport.update(time, delta, this.currentZone);
-            this.activeBlock.sprite.setPosition(
-                pos.x,
-                pos.y + this.activeTransport.getBlockOffsetY()
-            );
+            this.activeTransport.update(time, delta, this.currentZone);
+            
+            // 🎯 ВЫЗОВ БЕЗ АРГУМЕНТОВ
+            const blockPos = this.activeTransport.getBlockSpawnPosition();
+            
+            this.activeBlock.sprite.setPosition(blockPos.x, blockPos.y);
 
-            // Проверка выхода транспорта за границы (для корабля)
             if (this.activeTransport.isOutOfBounds()) {
                 this.gameOver();
             }
