@@ -10,6 +10,7 @@ import { Ship } from './entities/transports/Ship.js';
 import { Puff } from './effects/Puff.js';
 import { randomRange } from './utils.js';
 import { BackgroundManager } from './BackgroundManager.js';
+import { Crash } from './effects/Crash.js';
 
 export default class GameScene extends Phaser.Scene {
     constructor() {
@@ -90,6 +91,16 @@ export default class GameScene extends Phaser.Scene {
                 frameHeight: 128   
             }
         );
+
+        this.load.spritesheet(
+            'crash_spritesheet',                    
+            'assets/images/crash_spritesheet.png', 
+            { 
+                frameWidth: 128,   
+                frameHeight: 128   
+            }
+        );
+
         console.log('Эффекты загружены');
 
         // Загружаем UI
@@ -119,6 +130,20 @@ export default class GameScene extends Phaser.Scene {
             repeat: 0,           
             hideOnComplete: true
         });
+
+        
+        // Создание эффекта крушения
+            this.anims.create({
+            key: 'crash',
+            frames: this.anims.generateFrameNumbers('crash_spritesheet', { 
+                start: 0,   
+                end: 8      
+            }),
+            frameRate: 20,       
+            repeat: 0,           
+            hideOnComplete: false
+        });
+
 
         // Инициализация звуков
         this.audio.init(this);
@@ -178,7 +203,6 @@ export default class GameScene extends Phaser.Scene {
         // Обновляем позицию транспорта
         this.activeTransport.update(this.time.now, 0, this.currentZone);
         
-        // 🎯 ВЫЗОВ БЕЗ АРГУМЕНТОВ
         const spawnPos = this.activeTransport.getBlockSpawnPosition();
 
         // Создаём блок
@@ -208,9 +232,8 @@ export default class GameScene extends Phaser.Scene {
                 this.onBlockLanded, null, this
             )
         );
-       
 
-         // Коллизия с остальными блоками — если упал не на верхний, проигрыш
+        // Коллизия с остальными блоками — если упал не на верхний, проигрыш
         this.installedBlocks.forEach(block => {
             if (block !== topBlock) {
                 this.colliders.push(
@@ -246,7 +269,6 @@ export default class GameScene extends Phaser.Scene {
             }
         });
     }
-
     
 
     /**
@@ -261,6 +283,14 @@ export default class GameScene extends Phaser.Scene {
             blockSprite.body.moves = false;
         }
 
+         if (this.activeBlock) {
+            this.activeBlock.sprite.setVisible(false);
+        }
+
+
+        new Crash(this, blockSprite.x, blockSprite.y - 50)
+      
+
         this.time.delayedCall(600, () => {
             if (!this.isGameOver) this.gameOver();
         });
@@ -272,7 +302,6 @@ export default class GameScene extends Phaser.Scene {
     onBlockLanded(fallingSprite, targetSprite) {
         if (this.isGameOver || this.isProcessingLanding) return;
         if (!this.activeBlock || fallingSprite !== this.activeBlock.sprite) return;
-        
 
         this.isProcessingLanding = true;
         this.clearColliders();
@@ -333,7 +362,6 @@ export default class GameScene extends Phaser.Scene {
                 oldBlock.sprite.body.enable = false;
             }
         }
-
 
         // Движение камеры
         const triggerLine = this.cameras.main.scrollY + (this.scale.height * CONFIG.CAMERA.TRIGGER_LINE);
@@ -448,9 +476,7 @@ export default class GameScene extends Phaser.Scene {
         this.isGameOver = true;
         this.clearColliders();
 
-        if (this.activeBlock) {
-            this.activeBlock.setTint(0xff0000);
-        }
+       
 
         const cx = this.scale.width / 2;
         const cy = this.cameras.main.scrollY + this.scale.height / 2;
@@ -487,7 +513,6 @@ export default class GameScene extends Phaser.Scene {
         if (this.activeBlock && !this.isDropping && !this.isGameOver && this.activeTransport) {
             this.activeTransport.update(time, delta, this.currentZone);
             
-            // 🎯 ВЫЗОВ БЕЗ АРГУМЕНТОВ
             const blockPos = this.activeTransport.getBlockSpawnPosition();
             
             this.activeBlock.sprite.setPosition(blockPos.x, blockPos.y);
