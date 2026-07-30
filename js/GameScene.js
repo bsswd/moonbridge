@@ -434,12 +434,12 @@ export default class GameScene extends Phaser.Scene {
 
         if (!this.moon) {
             this.moon = this.add.image(cx, this.cameras.main.scrollY - 600, CONFIG.TEXTURES.MOON);
-            this.moon.setScale(0.25);
+            this.moon.setScale(0.15);
         }
 
         this.tweens.add({
             targets: this.moon,
-            scale: 1,
+            scale: 1.6,
             alpha: 1,
             y: cy - 100,
             duration: 1500,
@@ -451,7 +451,7 @@ export default class GameScene extends Phaser.Scene {
                 fontSize: CONFIG.UI.FONT_SIZE_XLARGE, fill: CONFIG.UI.COLOR_GREEN, fontStyle: 'bold', fontFamily: CONFIG.UI.FONT_FAMILY,
             }).setOrigin(0.5);
 
-            this.add.text(cx, cy, 'Вы преодолели 384 400 км. +/- 12 см.', {
+            this.add.text(cx, cy, 'Пройдено 384 400 км. +/- 12 см.', {
                 fontSize: CONFIG.UI.FONT_SIZE_MEDIUM, fill: CONFIG.UI.COLOR_BLUE, fontFamily: CONFIG.UI.FONT_FAMILY,
             }).setOrigin(0.5);
 
