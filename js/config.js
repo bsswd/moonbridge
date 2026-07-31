@@ -14,8 +14,8 @@ export const CONFIG = {
     },
 
     DISTANCE: {
-        TOTAL: 100,                 // 384400 для финальной версии
-        PER_BLOCK: 10,              // Нужно тестировать
+        TOTAL: 384400,                // 384400 для финальной версии
+        PER_BLOCK: 1,              // Нужно тестировать
     },
 
     CRANE: {
@@ -63,14 +63,7 @@ export const CONFIG = {
             'block_03',
             'block_04',
             'block_05',
-            'block_06',
-            /*
-            'block_07',
-            'block_08',
-            'block_09',
-            'block_10',
-            'block_11'
-            */
+            'block_06',         
         ],
 
         // UI
@@ -108,28 +101,35 @@ export const CONFIG = {
             COLOR_BORDER: 0x00ffcc, 
         },
     },
+
+    // 🔧 НАСТРОЙКИ ДЕБАГА
+    DEBUG: {
+        ENABLED: true,           // Включить/выключить дебаг-режим
+        SKIP_DISTANCE: 10000,     // Сколько км пропускать за одно нажатие        
+    },
 };
+
 
 export const ZONES = [
     {
         label: 'earth',
         name: 'ЗЕМЛЯ',
         color: '#1414af',
-        minDistance: 50, // Должно быть 80 000
+        minDistance: 200000, 
         transport: 'crane',
     },
     {
         label: 'sky',
         name: 'НЕБО',
         color: '#1a0b2e',
-        minDistance: 30, // Должно быть 200 000
+        minDistance: 80000, 
         transport: 'heli',
     },
     {
         label: 'space',
         name: 'КОСМОС',
         color: '#050510',
-        minDistance: 0, // Должно быть 0
+        minDistance: 0, 
         transport: 'ship',
     },
 ];
