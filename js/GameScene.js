@@ -66,6 +66,7 @@ export default class GameScene extends Phaser.Scene {
         this.load.image(CONFIG.TEXTURES.MOON, 'assets/images/moon.png');
         console.log('Окружение загружено');
 
+
         // Загружаем блоки  
        if (CONFIG.TEXTURES.BLOCKS && Array.isArray(CONFIG.TEXTURES.BLOCKS)) {
             CONFIG.TEXTURES.BLOCKS.forEach(blockKey => {
@@ -76,13 +77,28 @@ export default class GameScene extends Phaser.Scene {
             console.warn('Массив BLOCKS не найден в конфиге!');
         }
 
+
         // Загружаем транспорт
+        // Кран
         this.load.image(CONFIG.TEXTURES.CRANE, 'assets/images/crane.png');
-        this.load.image(CONFIG.TEXTURES.HELI, 'assets/images/heli.png');
+
+        // Вертолет
+        this.load.spritesheet(
+            CONFIG.TEXTURES.HELI,
+            'assets/images/heli_spritesheet.png',
+            {
+                frameWidth: 320,  
+                frameHeight: 180  
+            }
+        );
+       
+        // Корабль
         this.load.image(CONFIG.TEXTURES.SHIP, 'assets/images/ship.png');
         console.log('Транспорт загружен');
 
+
         // Загружаем эффекты
+        // Приземление на блок
         this.load.spritesheet(
             'puff_spritesheet',                    
             'assets/images/puff_spritesheet.png', 
@@ -92,6 +108,7 @@ export default class GameScene extends Phaser.Scene {
             }
         );
 
+        // Разрушение при падении на землю
         this.load.spritesheet(
             'crash_spritesheet',                    
             'assets/images/crash_spritesheet.png', 
@@ -100,12 +117,13 @@ export default class GameScene extends Phaser.Scene {
                 frameHeight: 128   
             }
         );
-
         console.log('Эффекты загружены');
+
 
         // Загружаем UI
         this.load.image(CONFIG.TEXTURES.BAR_FILL, 'assets/images/bar_fill.png');
         console.log('UI загружен');
+
 
         // Обработка ошибок
         this.load.on('loaderror', (file) => {
@@ -119,7 +137,28 @@ export default class GameScene extends Phaser.Scene {
     }
 
     create() {
-        // Создание эффекта приземления
+        // Анимации
+        // Вертолет
+        const heliTexture = this.textures.get(CONFIG.TEXTURES.HELI);
+        const frameCount = heliTexture.frameTotal;
+        
+        console.log(`Вертолёт: загружено ${frameCount} кадров`);
+
+        if (frameCount > 1) {
+            this.anims.create({
+                key: 'heli_fly',
+                frames: this.anims.generateFrameNumbers(CONFIG.TEXTURES.HELI, {
+                    start: 0,
+                    end: frameCount - 1
+                }),
+                frameRate: 8,
+                repeat: -1
+            });
+            console.log(`Анимация вертолёта создана (кадры 0-${frameCount - 1})`);
+        }
+
+
+        // Эффект приземления
          this.anims.create({
             key: 'puff',
             frames: this.anims.generateFrameNumbers('puff_spritesheet', { 
@@ -132,7 +171,7 @@ export default class GameScene extends Phaser.Scene {
         });
 
         
-        // Создание эффекта крушения
+        // Эффекта разрушения при падении на землю
             this.anims.create({
             key: 'crash',
             frames: this.anims.generateFrameNumbers('crash_spritesheet', { 
@@ -148,6 +187,7 @@ export default class GameScene extends Phaser.Scene {
         // Инициализация звуков
         this.audio.init(this);
 
+
         // Создание земли
         const centerX = this.scale.width / 2;
         this.ground = this.physics.add.staticImage(
@@ -155,8 +195,10 @@ export default class GameScene extends Phaser.Scene {
         );
         this.ground.setDepth(-1);
         
+
         // Создание тайлового фона
         this.backgroundManager = new BackgroundManager(this, CONFIG.TEXTURES.BG_EARTH, -10);
+
 
         // Базовый блок
         const baseY = this.scale.height - 140;
@@ -164,22 +206,27 @@ export default class GameScene extends Phaser.Scene {
         this.installedBlocks.push(baseBlock);
         this.physicsBlocks.push(baseBlock);
 
+
         // UI
         this.hud = new HUD(this);
+
 
         // Настройка мира
         this.physics.world.setBounds(0, -100000, this.scale.width, 100000 + this.scale.height);
         this.input.on('pointerdown', this.dropBlock, this);
+
 
         // Начальная зона
         this.currentZone = getZoneByDistance(this.distanceLeft);
         this.cameras.main.setBackgroundColor(this.currentZone.color);
         this.hud.update(this.distanceLeft, CONFIG.DISTANCE.TOTAL, this.currentZone.name);
 
+
         // Спавн первого блока
         this.spawnBlock();
 
-        // ДЕБАГ: Горячая клавиша для пропуска блока D
+
+        // ДЕБАГ: Горячая клавиша для пропуска блока -> D
         if (CONFIG.DEBUG.ENABLED) {
             this.input.keyboard.on('keydown-D', () => {
                 this.debugSkipBlock();
@@ -187,6 +234,7 @@ export default class GameScene extends Phaser.Scene {
             console.log('DEBUG: Горячая клавиша D активна');
         }
     }
+
 
     /**
      * Спавн нового активного блока и транспорта для текущей зоны
