@@ -447,7 +447,7 @@ export default class GameScene extends Phaser.Scene {
 
         this.tweens.add({
             targets: this.moon,
-            scale: 1.6,
+            scale: 1.3,
             alpha: 1,
             y: cy - 100,
             duration: 1500,
@@ -483,8 +483,6 @@ export default class GameScene extends Phaser.Scene {
 
         this.isGameOver = true;
         this.clearColliders();
-
-       
 
         const cx = this.scale.width / 2;
         const cy = this.cameras.main.scrollY + this.scale.height / 2;
@@ -547,7 +545,6 @@ export default class GameScene extends Phaser.Scene {
         this.colliders.forEach(c => c?.destroy());
         this.colliders = [];
     }
-
 
     debugSkipBlock() {
         if (!CONFIG.DEBUG.ENABLED) return;
