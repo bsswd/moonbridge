@@ -178,6 +178,14 @@ export default class GameScene extends Phaser.Scene {
 
         // Спавн первого блока
         this.spawnBlock();
+
+        // ДЕБАГ: Горячая клавиша для пропуска блока D
+        if (CONFIG.DEBUG.ENABLED) {
+            this.input.keyboard.on('keydown-D', () => {
+                this.debugSkipBlock();
+            });
+            console.log('DEBUG: Горячая клавиша D активна');
+        }
     }
 
     /**
@@ -538,5 +546,36 @@ export default class GameScene extends Phaser.Scene {
     clearColliders() {
         this.colliders.forEach(c => c?.destroy());
         this.colliders = [];
+    }
+
+
+    debugSkipBlock() {
+        if (!CONFIG.DEBUG.ENABLED) return;
+        
+        console.log('🔧 DEBUG: Пропускаем блок');
+        
+        // Уменьшаем расстояние
+        this.distanceLeft -= CONFIG.DEBUG.SKIP_DISTANCE;
+        
+        // Если достигли конца - победа
+        if (this.distanceLeft <= 0) {
+            this.distanceLeft = 0;
+            this.victory();
+            return;
+        }
+        
+        // Проверяем смену зоны
+        const newZone = getZoneByDistance(this.distanceLeft);
+        if (newZone !== this.currentZone) {
+            this.currentZone = newZone;
+            this.onZoneChange(newZone);
+        }
+        
+        // Обновляем HUD
+        if (this.hud) {
+            this.hud.update(this.distanceLeft, CONFIG.DISTANCE.TOTAL, this.currentZone.name);
+        }
+        
+        console.log(`DEBUG: Осталось ${this.distanceLeft} км`);
     }
 }
