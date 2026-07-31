@@ -18,21 +18,24 @@ export class BackgroundManager {
     createInitialTiles() {
         const centerX = this.scene.scale.width / 2;
         const screenHeight = this.scene.scale.height;
+       
+        const count = 3;
         
-        // Рассчитываем, сколько тайлов нужно, чтобы покрыть экран + 1 запасной сверху и снизу
-        const count = Math.ceil(screenHeight / this.tileHeight) + 2;
-        
-        console.log(`🌍 Создаём начальные тайлы: ${count} шт., высота: ${this.tileHeight}`);
+        console.log(`Создаём начальные тайлы: ${count} шт., высота: ${this.tileHeight}`);
+
+        let startY = screenHeight + (this.tileHeight / 2);
 
         for (let i = 0; i < count; i++) {
-            // Располагаем их друг под другом, начиная чуть выше центра экрана
-            const yPos = (i * this.tileHeight) - (this.tileHeight * 2);
+            // Каждый следующий тайл располагается ВЫШЕ предыдущего на величину tileHeight
+            const yPos = startY - (i * this.tileHeight);
             
             const tile = this.scene.add.image(centerX, yPos, this.textureKey);
             tile.setDepth(this.depth);
             tile.setDisplaySize(this.scene.scale.width, this.tileHeight);
             
             this.tiles.push(tile);
+            
+            console.log(`Тайл ${i} создан на Y: ${yPos} (верхний край: ${yPos - this.tileHeight/2})`);
         }
     }
 
@@ -43,7 +46,7 @@ export class BackgroundManager {
         const camera = this.scene.cameras.main;
         const cameraBottomY = camera.worldView.bottom; // Нижняя граница видимой области камеры
 
-        // 1. Ищем самый НИЖНИЙ тайл, который УЖЁ ушёл за нижнюю границу камеры
+        // Ищем самый НИЖНИЙ тайл, который УЖЁ ушёл за нижнюю границу камеры
         let bottomTileIndex = -1;
         let maxY = -Infinity;
 
@@ -60,7 +63,7 @@ export class BackgroundManager {
             }
         }
 
-        // 2. Если такой тайл найден, переносим его на САМЫЙ ВЕРХ
+        // Если такой тайл найден, переносим его на САМЫЙ ВЕРХ
         if (bottomTileIndex !== -1) {
             const tileToMove = this.tiles[bottomTileIndex];
 
@@ -80,7 +83,7 @@ export class BackgroundManager {
             // Перемещаем "нижний" тайл ровно над "верхним"
             tileToMove.y = topTile.y - this.tileHeight;
             
-            // console.log(`Тайл перенесён наверх. Новый Y: ${tileToMove.y}`);
+            console.log(`Тайл перенесён наверх. Новый Y: ${tileToMove.y}`);
         }
     }
 
