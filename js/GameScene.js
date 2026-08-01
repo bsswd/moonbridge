@@ -1,6 +1,5 @@
 import Phaser from 'phaser'; 
 import { CONFIG, getZoneByDistance } from './config.js';
-import { TextureGenerator } from './TextureGenerator.js';
 import { AudioManager } from './AudioManager.js';
 import { HUD } from './HUD.js';
 import { Block } from './entities/Block.js';
