@@ -3,6 +3,7 @@ import { CONFIG } from '../config.js';
 /**
  * Игровой блок моста.
  * Автоматически выбирает случайную текстуру из списка.
+ * В случае определенного ивента загружает особенную текстуру.
  * Инкапсулирует физику, состояние и визуальное представление.
  */
 export class Block {
@@ -89,22 +90,15 @@ export class Block {
      */
     isBalancedOn(targetBlock) {
         const diffX = Math.abs(this.x - targetBlock.x);
-        return diffX <= this.size / 2;
+        return diffX <= this.size / CONFIG.BLOCK.OVERLAP;
     }
 
-    /**
-     * Подсветка блока (для крана)
-     */
-    addGlow() {
-        if (this.sprite.preFX) {
-            this.sprite.preFX.addGlow(0x00ffcc, 6, 0, false, 0.1, 6);
-        }
-    }
-
+    // Устанавливает цвет блока (для визуального эффекта)
     setTint(color) {
         this.sprite.setTint(color);
     }
 
+    // Уничтожает блок
     destroy() {
         this.sprite.destroy();
     }

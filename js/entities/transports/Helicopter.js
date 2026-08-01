@@ -11,7 +11,7 @@ export class Helicopter extends Transport {
         this.direction = 1;
         this.speed = 0;
         this.baseY = 0;
-        this.blockGap = -30;
+        this.blockGap = -20;
 
         // Состояние зависания
         this.isHovering = false;
@@ -25,7 +25,7 @@ export class Helicopter extends Transport {
 
         if (!this.sprite) {
             this.sprite = this.scene.add.sprite(0, 0, CONFIG.TEXTURES.HELI);
-            this.sprite.setScale(1);
+            this.sprite.setScale(0.8);
 
             this.sprite.setOrigin(0.5, 0.5);
             this.sprite.setDepth(50);
@@ -65,7 +65,7 @@ export class Helicopter extends Transport {
             this.sprite.setPosition(newX, this.baseY);
 
             // Разворот у границ
-            const margin = 50;
+            const margin = 150;
             if ((this.direction === 1 && newX > this.scene.scale.width - margin) ||
                 (this.direction === -1 && newX < margin)) {
                 this.direction *= -1;

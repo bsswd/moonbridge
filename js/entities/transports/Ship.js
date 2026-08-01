@@ -4,6 +4,7 @@ import { randomRange, randomSign } from '../../utils.js';
 
 /**
  * Космический корабль — пролетает через экран (зона "Космос")
+ * В случае, если корабль улетел за другую границу - проигрыш.
  */
 export class Ship extends Transport {
     constructor(scene) {
@@ -13,7 +14,7 @@ export class Ship extends Transport {
         this.baseY = 0;
         this.amplitude = 0;
         this.spawnTime = 0;
-        this.blockGap = -50;
+        this.blockGap = -70;
     }
 
     activate(spawnY) {
@@ -21,7 +22,7 @@ export class Ship extends Transport {
 
         if (!this.sprite) {
             this.sprite = this.scene.add.image(0, 0, CONFIG.TEXTURES.SHIP);
-            this.sprite.setScale(0.7);
+            this.sprite.setScale(0.8);
         }
 
         this.direction = randomSign();

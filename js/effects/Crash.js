@@ -8,7 +8,6 @@ export class Crash {
         this.sprite.setDepth(10);        
         this.sprite.play('crash');        
         this.sprite.on('animationcomplete', () => {
-            //this.sprite.destroy();
         });
     }
 }

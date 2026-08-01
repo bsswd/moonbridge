@@ -2,6 +2,7 @@ export const CONFIG = {
     BLOCK: {
         SIZE: 120,
         BOUNCE: 0.2,
+        OVERLAP: 2,
     },
 
     PHYSICS: {
@@ -24,8 +25,8 @@ export const CONFIG = {
     },
 
     HELICOPTER: {
-        SPEED_MIN: 180,
-        SPEED_MAX: 260,
+        SPEED_MIN: 150,
+        SPEED_MAX: 300,
         HOVER_CHANCE: 0.3,
         HOVER_DURATION_MIN: 400,
         HOVER_DURATION_MAX: 1400,

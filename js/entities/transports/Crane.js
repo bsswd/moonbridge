@@ -10,8 +10,6 @@ export class Crane extends Transport {
         super(scene);
         this.craneSprite = null;
         this.currentX = scene.scale.width / 2;
-        
-        // Расстояние от ВЕРХНЕГО края экрана до верха крана
         this.SCREEN_Y = -10; 
     }
 

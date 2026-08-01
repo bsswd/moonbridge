@@ -263,10 +263,6 @@ export default class GameScene extends Phaser.Scene {
 
         // Создаём блок
         this.activeBlock = new Block(this, spawnPos.x, spawnPos.y);
-        
-        if (zone.transport === 'crane') {
-            this.activeBlock.addGlow();
-        }
     }
 
     /**
