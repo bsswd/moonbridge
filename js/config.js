@@ -64,7 +64,10 @@ export const CONFIG = {
             'block_03',
             'block_04',
             'block_05',
-            'block_06',         
+            'block_06',
+            'block_07',
+            'block_08',
+            'block_09',         
         ],
 
         // UI
