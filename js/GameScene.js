@@ -385,6 +385,15 @@ export default class GameScene extends Phaser.Scene {
 
         new Puff(this, effectX, effectY);
 
+        // Проверка ачивок по номеру блока
+        this.blocksPlacedCount++;
+        const achievementMsg = CONFIG.ACHIEVEMENTS[this.blocksPlacedCount];
+        
+        if (achievementMsg) {
+            this.showAchievement(achievementMsg);
+            console.log(`🏆 Ачивка разблокирована на блоке #${this.blocksPlacedCount}: ${achievementMsg}`);
+        }
+
         // Обновление расстояния
         this.distanceLeft -= CONFIG.DISTANCE.PER_BLOCK;
         this.distanceAchived += CONFIG.DISTANCE.PER_BLOCK;
@@ -481,12 +490,19 @@ export default class GameScene extends Phaser.Scene {
     showAchievement(text) {
         const cx = this.scale.width / 2;
         const cy = this.cameras.main.scrollY + this.scale.height * 0.4;
+
+        const maxWidth = this.scale.width * 0.8;
         
         const achievementText = this.add.text(cx, cy, text, {
-            fontSize: CONFIG.UI.FONT_SIZE_XLARGE,
-            fill: CONFIG.UI.COLOR_BLUE,
+            fontSize: CONFIG.UI.FONT_SIZE_LARGE,
+            fill: CONFIG.UI.COLOR_GREEN,
             fontStyle: 'bold',
             fontFamily: CONFIG.UI.FONT_FAMILY,
+            wordWrap: { 
+                width: maxWidth
+            },
+            align: 'center'
+            
         }).setOrigin(0.5).setAlpha(0);
 
         this.tweens.add({
