@@ -21,6 +21,7 @@ export default class GameScene extends Phaser.Scene {
         this.distanceLeft = CONFIG.DISTANCE.TOTAL;
         this.distanceAchived = 0;
         this.currentZone = null;
+        this.blocksPlacedCount = 0;
         
         // Сущности
         this.installedBlocks = [];      // уже поставленные блоки
@@ -473,6 +474,35 @@ export default class GameScene extends Phaser.Scene {
         });
     }
 
+     /**
+     * 🏆 Показывает сообщение об ачивке в стиле смены зоны
+     * @param {string} text - Текст сообщения
+     */
+    showAchievement(text) {
+        const cx = this.scale.width / 2;
+        const cy = this.cameras.main.scrollY + this.scale.height * 0.4;
+        
+        const achievementText = this.add.text(cx, cy, text, {
+            fontSize: CONFIG.UI.FONT_SIZE_XLARGE,
+            fill: CONFIG.UI.COLOR_BLUE,
+            fontStyle: 'bold',
+            fontFamily: CONFIG.UI.FONT_FAMILY,
+        }).setOrigin(0.5).setAlpha(0);
+
+        this.tweens.add({
+            targets: achievementText,
+            alpha: 1,
+            duration: 600,
+            ease: 'Power2',
+            yoyo: true,
+            hold: 2500, 
+            onComplete: () => {achievementText.destroy();}
+        });
+
+        // Опционально: можно добавить звук ачивки здесь, когда он будет готов
+        // this.sound.play('sfx_achievement');
+    }
+
     /**
      * Победа
      */
@@ -527,6 +557,7 @@ export default class GameScene extends Phaser.Scene {
 
         this.isGameOver = true;
         this.clearColliders();
+        this.blocksPlacedCount = 0;
 
         const cx = this.scale.width / 2;
         const cy = this.cameras.main.scrollY + this.scale.height / 2;
