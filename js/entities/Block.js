@@ -23,6 +23,12 @@ export class Block {
         this.sprite = scene.physics.add.image(x, y, this.textureKey);
         this.sprite.setImmovable(true);
         this.sprite.body.allowGravity = false;
+
+        const bodyWidth = this.sprite.displayWidth;
+        const bodyHeight = this.sprite.displayHeight - 10;
+        
+        this.sprite.body.setSize(bodyWidth, bodyHeight);
+        
         this.isLanded = false;
     }
 
