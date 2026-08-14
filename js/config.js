@@ -71,7 +71,8 @@ export const CONFIG = {
         ],
 
         // UI
-        BAR_FILL: 'bar_fill', 
+        BAR_FILL: 'bar_fill',
+        TEXT_PLATE: 'text_plate', 
     },
 
     // Настройки фона

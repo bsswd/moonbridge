@@ -11,12 +11,29 @@ export class HUD {
     constructor(scene) {
         this.scene = scene;
 
+        // Подложка для расстояния
+        this.plateDistance = scene.add.image(
+            scene.scale.width - 580, 30,                       
+            CONFIG.TEXTURES.TEXT_PLATE
+        );
+        this.plateDistance.setScrollFactor(0);
+        this.plateDistance.setDepth(150); 
+
         // Текст расстояние
         this.distanceText = scene.add.text(20, 20, '', {
             fontSize: CONFIG.UI.FONT_SIZE_MEDIUM,
             fill: CONFIG.UI.COLOR_BLUE,
             fontFamily: CONFIG.UI.FONT_FAMILY,
         }).setScrollFactor(0);
+        this.distanceText.setDepth(200);
+
+        // Подложка для названия зоны
+        this.plateZone = scene.add.image(
+            scene.scale.width - 0, 30,                      
+            CONFIG.TEXTURES.TEXT_PLATE
+        );
+        this.plateZone.setScrollFactor(0);
+        this.plateZone.setDepth(150); 
         
         // Текст название зоны
         this.zoneText = scene.add.text(scene.scale.width - 20, 20, '', {
@@ -24,6 +41,7 @@ export class HUD {
             fill: CONFIG.UI.COLOR_BLUE,
             fontFamily: CONFIG.UI.FONT_FAMILY,
         }).setOrigin(1, 0).setScrollFactor(0);
+        this.zoneText.setDepth(200);
 
         this.createProgressBar(scene);
     }

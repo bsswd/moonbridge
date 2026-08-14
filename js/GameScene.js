@@ -121,6 +121,7 @@ export default class GameScene extends Phaser.Scene {
 
         // Загружаем UI
         this.load.image(CONFIG.TEXTURES.BAR_FILL, 'assets/images/bar_fill.png');
+        this.load.image(CONFIG.TEXTURES.TEXT_PLATE, 'assets/images/plate.png')
         console.log('UI загружен');
 
 
