@@ -78,6 +78,7 @@ export default class GameScene extends Phaser.Scene {
         }
 
 
+
         // Загружаем транспорт
         // Кран
         this.load.image(CONFIG.TEXTURES.CRANE, 'assets/images/crane.png');
@@ -391,7 +392,7 @@ export default class GameScene extends Phaser.Scene {
         
         if (achievementMsg) {
             this.showAchievement(achievementMsg);
-            console.log(`🏆 Ачивка разблокирована на блоке #${this.blocksPlacedCount}: ${achievementMsg}`);
+            console.log(`Ачивка разблокирована на блоке #${this.blocksPlacedCount}: ${achievementMsg}`);
         }
 
         // Обновление расстояния
@@ -640,7 +641,7 @@ export default class GameScene extends Phaser.Scene {
     debugSkipBlock() {
         if (!CONFIG.DEBUG.ENABLED) return;
         
-        console.log('🔧 DEBUG: Пропускаем блок');
+        console.log('DEBUG: Пропускаем блок');
         
         // Уменьшаем расстояние
         this.distanceLeft -= CONFIG.DEBUG.SKIP_DISTANCE;
