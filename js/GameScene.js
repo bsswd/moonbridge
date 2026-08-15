@@ -338,9 +338,7 @@ export default class GameScene extends Phaser.Scene {
             this.activeBlock.sprite.setVisible(false);
         }
 
-
         new Crash(this, blockSprite.x, blockSprite.y - 50)
-      
 
         this.time.delayedCall(600, () => {
             if (!this.isGameOver) this.gameOver();
