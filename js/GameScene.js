@@ -55,8 +55,6 @@ export default class GameScene extends Phaser.Scene {
     }
 
     preload() {
-        // Показываем, что загрузка началась
-        console.log('Начинаем загрузку спрайтов...');
 
         // Загружаем окружение
         this.load.image(CONFIG.TEXTURES.BG_EARTH, 'assets/images/bg_earth.png');
@@ -76,7 +74,6 @@ export default class GameScene extends Phaser.Scene {
         } else {
             console.warn('Массив BLOCKS не найден в конфиге!');
         }
-
 
 
         // Загружаем транспорт
@@ -231,7 +228,7 @@ export default class GameScene extends Phaser.Scene {
         // ДЕБАГ: Горячая клавиша для пропуска блока -> D
         if (CONFIG.DEBUG.ENABLED) {
             this.input.keyboard.on('keydown-D', () => {
-                this.debugSkipBlock();
+                this.debugPlaceBlock();
             });
             console.log('DEBUG: Горячая клавиша D активна');
         }
@@ -459,8 +456,6 @@ export default class GameScene extends Phaser.Scene {
         }
         
         this.backgroundManager = new BackgroundManager(this, bgTexture, -10);
-
-        this.cameras.main.setBackgroundColor(zone.color);
         this.audio.play('zone');
 
         const cx = this.scale.width / 2;
@@ -485,7 +480,7 @@ export default class GameScene extends Phaser.Scene {
     }
 
      /**
-     * 🏆 Показывает сообщение об ачивке в стиле смены зоны
+     * Показывает сообщение об ачивке в стиле смены зоны
      * @param {string} text - Текст сообщения
      */
     showAchievement(text) {
@@ -638,33 +633,93 @@ export default class GameScene extends Phaser.Scene {
         this.colliders = [];
     }
 
-    debugSkipBlock() {
+
+    /**
+     * ДЕБАГ: Имитирует идеальную установку текущего блока
+     * Позволяет быстро проверять ачивки, камеру и смену зон.
+     */
+
+    debugPlaceBlock() {
         if (!CONFIG.DEBUG.ENABLED) return;
-        
-        console.log('DEBUG: Пропускаем блок');
-        
-        // Уменьшаем расстояние
-        this.distanceLeft -= CONFIG.DEBUG.SKIP_DISTANCE;
-        
-        // Если достигли конца - победа
-        if (this.distanceLeft <= 0) {
-            this.distanceLeft = 0;
-            this.victory();
+
+        if (!this.activeBlock) {
+            console.log('DEBUG: Нет активного блока, спавним...');
+            this.spawnBlock();
             return;
         }
         
-        // Проверяем смену зоны
+        if (this.isGameOver || this.isProcessingLanding) return;
+
+        console.log(`DEBUG: Имитация успешной установки блока #${this.blocksPlacedCount + 1}`);
+
+        const fallingBlock = this.activeBlock;
+        const targetBlock = this.installedBlocks[this.installedBlocks.length - 1];
+
+        // Сбрасываем флаги и фиксируем блок (как при реальном успехе)
+        this.isDropping = false;
+        this.isProcessingLanding = true;
+        this.clearColliders();
+
+        fallingBlock.fixInPlace();
+        this.installedBlocks.push(fallingBlock);
+        this.physicsBlocks.push(fallingBlock);
+        this.activeBlock = null;
+
+        // ПРОВЕРКА АЧИВОК (Главная цель!)
+        this.blocksPlacedCount++;
+        const achievementMsg = CONFIG.ACHIEVEMENTS[this.blocksPlacedCount];
+        
+        if (achievementMsg) {
+            this.showAchievement(achievementMsg);
+            console.log(`DEBUG: Ачивка разблокирована! ${achievementMsg}`);
+        }
+
+        // Обновление расстояния
+        this.distanceLeft -= CONFIG.DISTANCE.PER_BLOCK;
+        this.distanceAchived += CONFIG.DISTANCE.PER_BLOCK;
+
+        // Проверка победы
+        if (this.distanceLeft <= 0) {
+            this.distanceLeft = 0;
+            this.hud.update(this.distanceLeft, CONFIG.DISTANCE.TOTAL, this.currentZone.name);
+            this.victory();
+            return;
+        }
+
+        // Проверка смены зоны
         const newZone = getZoneByDistance(this.distanceLeft);
-        if (newZone !== this.currentZone) {
+        if (newZone.label !== this.currentZone.label) {
             this.currentZone = newZone;
             this.onZoneChange(newZone);
         }
-        
-        // Обновляем HUD
-        if (this.hud) {
-            this.hud.update(this.distanceLeft, CONFIG.DISTANCE.TOTAL, this.currentZone.name);
+
+        // Обновление UI
+        this.hud.update(this.distanceLeft, CONFIG.DISTANCE.TOTAL, this.currentZone.name);
+
+        // Оптимизация: отключаем физику у старых блоков
+        if (this.physicsBlocks.length > CONFIG.PHYSICS.MAX_ACTIVE_BLOCKS) {
+            const oldBlock = this.physicsBlocks.shift();
+            if (oldBlock?.sprite?.body) {
+                oldBlock.sprite.body.enable = false;
+            }
         }
-        
-        console.log(`DEBUG: Осталось ${this.distanceLeft} км`);
+
+        // Движение камеры (имитируем реальное поведение)
+        const triggerLine = this.cameras.main.scrollY + (this.scale.height * CONFIG.CAMERA.TRIGGER_LINE);
+        if (fallingBlock.y < triggerLine) {
+            const targetScrollY = fallingBlock.y - (this.scale.height * CONFIG.CAMERA.TRIGGER_LINE);
+            this.tweens.add({
+                targets: this.cameras.main,
+                scrollY: targetScrollY,
+                duration: 1600,
+                ease: 'Sine.easeInOut',
+            });
+        }
+
+        // Спавн следующего блока через небольшую задержку
+        this.time.delayedCall(400, () => {
+            this.isProcessingLanding = false;
+            this.spawnBlock();
+        });
     }
 }
