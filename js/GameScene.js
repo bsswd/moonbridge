@@ -485,7 +485,7 @@ export default class GameScene extends Phaser.Scene {
      */
     showAchievement(text) {
         const cx = this.scale.width / 2;
-        const cy = this.cameras.main.scrollY + this.scale.height * 0.4;
+        const cy = this.scale.height * 0.4;
 
         const maxWidth = this.scale.width * 0.8;
         
@@ -499,7 +499,7 @@ export default class GameScene extends Phaser.Scene {
             },
             align: 'center'
             
-        }).setOrigin(0.5).setAlpha(0);
+        }).setOrigin(0.5).setAlpha(0).setScrollFactor(0);
 
         this.tweens.add({
             targets: achievementText,
