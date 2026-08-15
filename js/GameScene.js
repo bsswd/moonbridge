@@ -225,7 +225,7 @@ export default class GameScene extends Phaser.Scene {
         this.spawnBlock();
 
 
-        // ДЕБАГ: Горячая клавиша для пропуска блока -> D
+        // ДЕБАГ: Горячая клавиша для "успешной" установки блока -> D
         if (CONFIG.DEBUG.ENABLED) {
             this.input.keyboard.on('keydown-D', () => {
                 this.debugPlaceBlock();
@@ -413,15 +413,9 @@ export default class GameScene extends Phaser.Scene {
 
         // Обновление UI
         this.hud.update(this.distanceLeft, CONFIG.DISTANCE.TOTAL, this.currentZone.name);
-
         
-        // Оптимизация: отключаем физику у старых блоков
-        if (this.physicsBlocks.length > CONFIG.PHYSICS.MAX_ACTIVE_BLOCKS) {
-            const oldBlock = this.physicsBlocks.shift();
-            if (oldBlock?.sprite?.body) {
-                oldBlock.sprite.body.enable = false;
-            }
-        }
+        // Оптимизация: удаляем невидимые блоки
+        this.cleanupOldBlocks();
 
         // Движение камеры
         const triggerLine = this.cameras.main.scrollY + (this.scale.height * CONFIG.CAMERA.TRIGGER_LINE);
@@ -635,6 +629,50 @@ export default class GameScene extends Phaser.Scene {
 
 
     /**
+     * ОЧИСТКА ПАМЯТИ: Удаляет блоки, которые ушли ниже камеры
+     * Вызывается после каждой успешной установки блока.
+     */
+
+    cleanupOldBlocks() {
+        const cameraBottom = this.cameras.main.worldView.bottom;
+        const buffer = 300; // Запас в 300 пикселей ниже камеры (чтобы не мелькали при резких движениях)
+        
+        let removedCount = 0;
+
+        // Так как блоки добавляются снизу вверх, самый старый (нижний) блок всегда имеет индекс 0
+        // Мы проверяем его, и если он ниже камеры — удаляем. И так по кругу, пока не встретим видимый блок.
+        while (this.installedBlocks.length > 0) {
+            const oldestBlock = this.installedBlocks[0];
+            
+            // Если нижняя граница блока (или его центр) ниже камеры + буфер
+            if (oldestBlock.y > cameraBottom + buffer) {
+                
+                // Удаляем из массива физики (если он там есть)
+                const physIndex = this.physicsBlocks.indexOf(oldestBlock);
+                if (physIndex > -1) {
+                    this.physicsBlocks.splice(physIndex, 1);
+                }
+                
+                // Полностью уничтожаем объект (это вызывает sprite.destroy() внутри Block.js)
+                oldestBlock.destroy();
+                
+                // Удаляем из массива установленных блоков
+                this.installedBlocks.shift();
+                
+                removedCount++;
+            } else {
+                // Как только мы нашли блок, который ещё виден (или скоро будет виден), 
+                // мы можем остановить цикл, потому что все остальные блоки выше него.
+                break;
+            }
+        }
+
+        if (removedCount > 0) {
+            console.log(`Оптимизация: удалено старых блоков из памяти: ${removedCount}`);
+        }
+    }
+
+    /**
      * ДЕБАГ: Имитирует идеальную установку текущего блока
      * Позволяет быстро проверять ачивки, камеру и смену зон.
      */
@@ -696,13 +734,8 @@ export default class GameScene extends Phaser.Scene {
         // Обновление UI
         this.hud.update(this.distanceLeft, CONFIG.DISTANCE.TOTAL, this.currentZone.name);
 
-        // Оптимизация: отключаем физику у старых блоков
-        if (this.physicsBlocks.length > CONFIG.PHYSICS.MAX_ACTIVE_BLOCKS) {
-            const oldBlock = this.physicsBlocks.shift();
-            if (oldBlock?.sprite?.body) {
-                oldBlock.sprite.body.enable = false;
-            }
-        }
+        // Оптимизация: удаляем невидимые блоки
+        this.cleanupOldBlocks();
 
         // Движение камеры (имитируем реальное поведение)
         const triggerLine = this.cameras.main.scrollY + (this.scale.height * CONFIG.CAMERA.TRIGGER_LINE);

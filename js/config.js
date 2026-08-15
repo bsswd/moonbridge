@@ -34,6 +34,7 @@ export const CONFIG = {
         NEXT_HOVER_MAX: 3000,
         SPAWN_OFFSET: -18,
     },
+    
     SHIP: {
         SPEED_MIN: 180,
         SPEED_MAX: 300,
