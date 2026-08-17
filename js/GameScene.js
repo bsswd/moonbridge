@@ -491,7 +491,7 @@ export default class GameScene extends Phaser.Scene {
             },
             align: 'center'
             
-        }).setOrigin(0.5).setAlpha(0).setScrollFactor(0);
+        }).setOrigin(0.5).setAlpha(0).setScrollFactor(0).setDepth(300);
 
         this.tweens.add({
             targets: achievementText,
