@@ -13,7 +13,7 @@ export class HUD {
 
         // Подложка для расстояния
         this.plateDistance = scene.add.image(
-            scene.scale.width - 750, 50,                       
+            scene.scale.width - 680, 50,                       
             CONFIG.TEXTURES.TEXT_PLATE
         );
         this.plateDistance.setScrollFactor(0);
