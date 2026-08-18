@@ -90,7 +90,7 @@ export const CONFIG = {
     // Размеры шрифтов
     FONT_SIZE_SMALL: '32px',
     FONT_SIZE_MEDIUM: '40px',
-    FONT_SIZE_LARGE: '72px',
+    FONT_SIZE_LARGE: '64px',
     FONT_SIZE_XLARGE: '104px',
         
     // Цвета текста

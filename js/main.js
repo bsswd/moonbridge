@@ -1,4 +1,5 @@
 import Phaser from 'phaser';
+import StartScene from './StartScene.js';
 import GameScene from './GameScene.js';
 import { CONFIG } from './config.js';
 
@@ -44,7 +45,7 @@ const phaserConfig = {
     },
 
     // Сцены
-    scene: [GameScene],
+    scene: [StartScene, GameScene],
 
     // Отключаем контекстное меню по правому клику
     input: {
@@ -74,5 +75,5 @@ window.addEventListener('load', () => {
     // Делаем игру доступной глобально (для отладки в консоли)
     window.game = game;
 
-    console.log('Игра "384400+12 см" запущена!');
+    console.log('Игра "384400" запущена!');
 });
