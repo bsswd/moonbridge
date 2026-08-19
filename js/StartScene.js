@@ -27,7 +27,6 @@ export default class StartScene extends Phaser.Scene {
             fontSize: CONFIG.UI.FONT_SIZE_LARGE, 
             fill: CONFIG.UI.COLOR_BLUE,    
             fontFamily: CONFIG.UI.FONT_FAMILY,  
-            fontStyle: 'bold',
             align: 'center',
             wordWrap: { width: this.scale.width * 0.8 }
         })
@@ -57,17 +56,15 @@ export default class StartScene extends Phaser.Scene {
             this.startButton = btnGraphics;
         } else {
             
-            this.startButton.setScale(1); 
+            this.startButton.setScale(0.7); 
         }
 
         this.startButton.on('pointerover', () => {
-            this.startButton.setScale(1.05);
-            if (this.startButton.setTint) this.startButton.setTint(0xdddddd); 
+            this.startButton.setScale(0.8);
         });
 
         this.startButton.on('pointerout', () => {
-            this.startButton.setScale(1);
-            if (this.startButton.clearTint) this.startButton.clearTint();
+            this.startButton.setScale(0.7);
         });
 
         this.startButton.on('pointerdown', () => {
