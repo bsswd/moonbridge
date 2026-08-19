@@ -3,6 +3,8 @@ import StartScene from './StartScene.js';
 import GameScene from './GameScene.js';
 import { CONFIG } from './config.js';
 
+await initYandexSDK();
+
 WebFont.load({
     custom: {
         families: ['Daneehand'],
