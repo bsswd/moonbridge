@@ -57,11 +57,13 @@
     <!-- WebFontLoader -->
     <!-- <script src="https://ajax.googleapis.com/ajax/libs/webfont/1.6.26/webfont.js"></script> -->
 
+    <!-- Yandex Games SDK -->
+    <script async src="/sdk.js" onload="initSDK()"></script>
+
     <!-- Точка входа -->
     <script type="module" src="./js/main.js"></script>
 
-    <!-- Yandex Games SDK -->
-    <script async src="/sdk.js" onload="initSDK()"></script>
+   
 
     <script>
       let ysdk;
@@ -69,6 +71,7 @@
       async function initSDK() {
         try {
           ysdk = await YaGames.init();
+          const lang = ysdk.environment.i18n.lang;
           console.log('SDK готов');
           // ysdk.loadingAPI.ready();
         } catch (e) {
