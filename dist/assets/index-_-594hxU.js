@@ -1,4 +1,4 @@
-import { P as Phaser } from "./phaser-BhJor0i-.js";
+import { P as Phaser$1 } from "./phaser-BhJor0i-.js";
 (function polyfill() {
   const relList = document.createElement("link").relList;
   if (relList && relList.supports && relList.supports("modulepreload")) {
@@ -164,7 +164,7 @@ function getZoneByDistance(distanceLeft) {
   }
   return MOON_ZONE;
 }
-class StartScene extends Phaser.Scene {
+class StartScene extends Phaser$1.Scene {
   constructor() {
     super("StartScene");
   }
@@ -195,7 +195,7 @@ class StartScene extends Phaser.Scene {
       const btnGraphics = this.add.graphics();
       btnGraphics.fillStyle(65484, 1);
       btnGraphics.fillRoundedRect(centerX - 100, centerY + 50, 200, 60, 15);
-      btnGraphics.setInteractive(new Phaser.Geom.Rectangle(centerX - 100, centerY + 50, 200, 60), Phaser.Geom.Rectangle.Contains);
+      btnGraphics.setInteractive(new Phaser$1.Geom.Rectangle(centerX - 100, centerY + 50, 200, 60), Phaser$1.Geom.Rectangle.Contains);
       this.add.text(centerX, centerY + 80, "ПОЕХАЛИ!", {
         fontSize: CONFIG.UI.FONT_SIZE_MEDIUM,
         fill: "#000000",
@@ -741,7 +741,7 @@ class Crash {
     });
   }
 }
-class GameScene extends Phaser.Scene {
+class GameScene extends Phaser$1.Scene {
   constructor() {
     super("GameScene");
   }
@@ -1240,60 +1240,65 @@ class GameScene extends Phaser.Scene {
     return;
   }
 }
-WebFont.load({
-  custom: {
-    families: ["Daneehand"],
-    urls: ["./assets/fonts/Daneehand.ttf"]
-  },
-  active: () => {
-    console.log("Шрифты загружены");
-  },
-  inactive: () => {
-    console.warn("Шрифты не загрузились, используем системные");
+window.ysdk = null;
+window.GAME_LANG = "ru";
+async function initYandexSDK() {
+  try {
+    window.ysdk = await YaGames.init();
+    window.GAME_LANG = window.ysdk.environment.i18n.lang || "ru";
+    console.log("✅ SDK инициализирован. Язык:", window.GAME_LANG);
+  } catch (error) {
+    console.warn("⚠️ SDK не инициализирован (локальный запуск).", error);
+    window.GAME_LANG = "ru";
   }
-});
+}
 const phaserConfig = {
   type: Phaser.AUTO,
-  // WebGL или Canvas
   parent: "game-container",
   width: 720,
   height: 1080,
   backgroundColor: "#000000",
-  // Масштабирование под экран
   scale: {
     mode: Phaser.Scale.FIT,
     autoCenter: Phaser.Scale.CENTER_BOTH
   },
-  // Физика
   physics: {
     default: "arcade",
     arcade: {
       gravity: { y: 800 },
       debug: false
-      //  true для отладки физики
     }
   },
-  // Сцены
   scene: [StartScene, GameScene],
-  // Отключаем контекстное меню по правому клику
   input: {
-    mouse: {
-      preventDefaultWheel: true,
-      preventDefaultDown: true
-    },
-    touch: {
-      capture: true
-    }
+    mouse: { preventDefaultWheel: true, preventDefaultDown: true },
+    touch: { capture: true }
   },
-  // Рендеринг
   render: {
     pixelArt: false,
     antialias: true,
     roundPixels: true
   }
 };
-window.addEventListener("load", () => {
+async function startGame() {
+  var _a, _b;
+  await initYandexSDK();
+  try {
+    await document.fonts.load("16px Daneehand");
+    console.log("✅ Шрифт Daneehand загружен");
+  } catch (error) {
+    console.warn("⚠️ Шрифт не загрузился, используем системный", error);
+  }
+  if (typeof Phaser === "undefined") {
+    console.error("❌ Phaser не найден! Проверь js/phaser.min.js");
+    return;
+  }
   const game = new Phaser.Game(phaserConfig);
   window.game = game;
-  console.log('Игра "384400" запущена!');
-});
+  console.log("🚀 Игра запущена!");
+  if ((_b = (_a = window.ysdk) == null ? void 0 : _a.features) == null ? void 0 : _b.LoadingAPI) {
+    window.ysdk.features.LoadingAPI.ready();
+    console.log("✅ LoadingAPI.ready() вызван");
+  }
+}
+window.addEventListener("load", startGame);

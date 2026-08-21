@@ -5,81 +5,41 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="mobile-web-app-capable" content="yes">
     <title>384400</title>
+    
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         html, body {
-            width: 100%;
-            height: 100%;
-            overflow: hidden;
-            background-color: #000;
-            touch-action: none; /* Отключаем зум и скролл на мобильных */
+            width: 100%; height: 100%; overflow: hidden;
+            background-color: #000000; touch-action: none;
             -webkit-tap-highlight-color: transparent;
         }
-
-        #game-container {
-            width: 100%;
-            height: 100%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
+        #game-container { 
+            width: 100%; height: 100%; 
+            display: flex; justify-content: center; align-items: center; 
         }
-
-        canvas {
-            display: block;
-            touch-action: none;
-        }
-
+        canvas { display: block; touch-action: none; }
+        
+        /* 🎯 Шрифт загружается ЛОКАЛЬНО из папки assets */
         @font-face {
-        font-family: 'Exo2-Bold';
-        src: url('./assets/Exo2-Bold-wOMXxN1W.ttf') format('truetype');
-        font-weight: normal;
-        font-style: normal;
-        }
-
-        @font-face {
-        font-family: 'Daneehand';
-        src: url('./assets/Daneehand-Dsv6V6tt.ttf') format('truetype');
-        font-weight: normal;
-        font-style: normal;
+            font-family: 'Daneehand';
+            src: url('./assets/Daneehand-Dsv6V6tt.ttf') format('truetype');
+            font-weight: normal;
+            font-style: normal;
+            font-display: swap;
         }
     </style>
 
-  <script type="module" crossorigin src="./assets/index-B7QT_2SL.js"></script>
+    <!-- 🌐 Единственный внешний скрипт — официальный Яндекс SDK -->
+    <script src="https://yandex.ru/games/sdk/v2"></script>
+  <script type="module" crossorigin src="./assets/index-_-594hxU.js"></script>
   <link rel="modulepreload" crossorigin href="./assets/phaser-BhJor0i-.js">
 </head>
 <body>
-    <!-- Контейнер для Phaser -->
     <div id="game-container"></div>
 
-    <!-- WebFontLoader -->
-    <!-- <script src="https://ajax.googleapis.com/ajax/libs/webfont/1.6.26/webfont.js"></script> -->
+    <!-- 🎮 Phaser (локальный файл) -->
+    <script src="./js/phaser.min.js"></script>
 
-    <!-- Yandex Games SDK -->
-    <script async src="/sdk.js" onload="initSDK()"></script>
-
-    <!-- Точка входа -->
-
-   
-
-    <script>
-      let ysdk;
-
-      async function initSDK() {
-        try {
-          ysdk = await YaGames.init();
-          const lang = ysdk.environment.i18n.lang;
-          console.log('SDK готов');
-          // ysdk.loadingAPI.ready();
-        } catch (e) {
-          console.error('Ошибка SDK', e);
-        }
-      }
-    </script>
-
+    <!-- 🚀 Точка входа -->
 </body>
 </html>

@@ -13,17 +13,32 @@
             background-color: #000000; touch-action: none;
             -webkit-tap-highlight-color: transparent;
         }
-        #game-container { width: 100%; height: 100%; display: flex; justify-content: center; align-items: center; }
+        #game-container { 
+            width: 100%; height: 100%; 
+            display: flex; justify-content: center; align-items: center; 
+        }
         canvas { display: block; touch-action: none; }
+        
+        /* 🎯 Шрифт загружается ЛОКАЛЬНО из папки assets */
+        @font-face {
+            font-family: 'Daneehand';
+            src: url('./assets/fonts/Daneehand.ttf') format('truetype');
+            font-weight: normal;
+            font-style: normal;
+            font-display: swap;
+        }
     </style>
 
-    <!-- 🌐 Yandex Games SDK (единственный внешний скрипт, который разрешён) -->
+    <!-- 🌐 Единственный внешний скрипт — официальный Яндекс SDK -->
     <script src="https://yandex.ru/games/sdk/v2"></script>
 </head>
 <body>
     <div id="game-container"></div>
-    
-    <!-- Vite сам подставит сюда ссылку на собранный бандл -->
-    <script type="module" src="/js/main.js"></script>
+
+    <!-- 🎮 Phaser (локальный файл) -->
+    <script src="./js/phaser.min.js"></script>
+
+    <!-- 🚀 Точка входа -->
+    <script type="module" src="./js/main.js"></script>
 </body>
 </html>

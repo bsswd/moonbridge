@@ -1,66 +1,49 @@
-import Phaser from 'phaser';
 import StartScene from './StartScene.js';
 import GameScene from './GameScene.js';
-import { CONFIG } from './config.js';
 
-await initYandexSDK();
-
-WebFont.load({
-    custom: {
-        families: ['Daneehand'],
-        urls: ['./assets/fonts/Daneehand.ttf']
-    },
-    active: () => {
-        console.log('Шрифты загружены');
-       
-    },
-    inactive: () => {
-        console.warn('Шрифты не загрузились, используем системные');
-        
-    }
-});
-
+// 🌐 Глобальные переменные
+window.ysdk = null;
+window.GAME_LANG = 'ru';
 
 /**
- * Конфигурация движка Phaser
+ * 1. Инициализация Yandex SDK и определение языка
+ */
+async function initYandexSDK() {
+    try {
+        window.ysdk = await YaGames.init();
+        window.GAME_LANG = window.ysdk.environment.i18n.lang || 'ru';
+        console.log('✅ SDK инициализирован. Язык:', window.GAME_LANG);
+    } catch (error) {
+        console.warn('⚠️ SDK не инициализирован (локальный запуск).', error);
+        window.GAME_LANG = 'ru';
+    }
+}
+
+/**
+ * Конфигурация Phaser
  */
 const phaserConfig = {
-    type: Phaser.AUTO, // WebGL или Canvas
+    type: Phaser.AUTO,
     parent: 'game-container',
     width: 720,
     height: 1080,
     backgroundColor: '#000000',
-
-    // Масштабирование под экран
     scale: {
         mode: Phaser.Scale.FIT,
         autoCenter: Phaser.Scale.CENTER_BOTH,
     },
-
-    // Физика
     physics: {
         default: 'arcade',
         arcade: {
             gravity: { y: 800 },
-            debug: false, //  true для отладки физики
+            debug: false,
         },
     },
-
-    // Сцены
     scene: [StartScene, GameScene],
-
-    // Отключаем контекстное меню по правому клику
     input: {
-        mouse: {
-            preventDefaultWheel: true,
-            preventDefaultDown: true,
-        },
-        touch: {
-            capture: true,
-        },
+        mouse: { preventDefaultWheel: true, preventDefaultDown: true },
+        touch: { capture: true },
     },
-
-    // Рендеринг
     render: {
         pixelArt: false,
         antialias: true,
@@ -69,13 +52,37 @@ const phaserConfig = {
 };
 
 /**
- * Запуск игры
+ * 2. Запуск игры
  */
-window.addEventListener('load', () => {
+async function startGame() {
+    // Ждём инициализации SDK
+    await initYandexSDK();
+
+    // 🎯 Ждём загрузки шрифта через ВСТРОЕННЫЙ API браузера (без внешних скриптов!)
+    try {
+        await document.fonts.load('16px Daneehand');
+        console.log('✅ Шрифт Daneehand загружен');
+    } catch (error) {
+        console.warn('⚠️ Шрифт не загрузился, используем системный', error);
+    }
+
+    // Проверяем Phaser
+    if (typeof Phaser === 'undefined') {
+        console.error('❌ Phaser не найден! Проверь js/phaser.min.js');
+        return;
+    }
+
+    // Запускаем игру
     const game = new Phaser.Game(phaserConfig);
-
-    // Делаем игру доступной глобально (для отладки в консоли)
     window.game = game;
+    console.log('🚀 Игра запущена!');
 
-    console.log('Игра "384400" запущена!');
-});
+    // Сообщаем Яндексу, что игра готова
+    if (window.ysdk?.features?.LoadingAPI) {
+        window.ysdk.features.LoadingAPI.ready();
+        console.log('✅ LoadingAPI.ready() вызван');
+    }
+}
+
+// Старт при загрузке страницы
+window.addEventListener('load', startGame);
