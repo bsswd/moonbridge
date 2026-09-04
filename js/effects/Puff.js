@@ -6,7 +6,8 @@ export class Puff {
         this.sprite.setScale(2);        
         this.sprite.setAlpha(0.8);        
         this.sprite.setDepth(10);        
-        this.sprite.play('puff');        
+        this.sprite.play('puff');
+                
         this.sprite.on('animationcomplete', () => {
             this.sprite.destroy();
         });

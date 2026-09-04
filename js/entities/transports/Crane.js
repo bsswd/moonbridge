@@ -1,10 +1,6 @@
 import { Transport } from './Transport.js';
 import { CONFIG } from '../../config.js';
 
-/**
- * Кран: жёстко закреплён вверху экрана, раскачивается.
- * Блок спавнится строго под нижней границей спрайта.
- */
 export class Crane extends Transport {
     constructor(scene) {
         super(scene);

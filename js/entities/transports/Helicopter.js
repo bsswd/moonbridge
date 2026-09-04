@@ -2,9 +2,6 @@ import { Transport } from './Transport.js';
 import { CONFIG } from '../../config.js';
 import { randomRange, randomSign } from '../../utils.js';
 
-/**
- * Вертолёт — летает между краями экрана, случайно зависает (зона "Небо")
- */
 export class Helicopter extends Transport {
     constructor(scene) {
         super(scene);
@@ -64,7 +61,6 @@ export class Helicopter extends Transport {
             const newX = this.sprite.x + this.direction * this.speed * (delta / 1000);
             this.sprite.setPosition(newX, this.baseY);
 
-            // Разворот у границ
             const margin = 150;
             if ((this.direction === 1 && newX > this.scene.scale.width - margin) ||
                 (this.direction === -1 && newX < margin)) {
@@ -72,7 +68,6 @@ export class Helicopter extends Transport {
                 this.sprite.setFlipX(this.direction === -1);
             }
 
-            // Случайное зависание
             this.hoverTimer += delta;
             if (this.hoverTimer > this.nextHoverCheckTime) {
                 if (Math.random() < CONFIG.HELICOPTER.HOVER_CHANCE) {

@@ -6,7 +6,8 @@ export class Crash {
         this.sprite.setScale(2);        
         this.sprite.setAlpha(0.8);        
         this.sprite.setDepth(10);        
-        this.sprite.play('crash');        
+        this.sprite.play('crash');
+                
         this.sprite.on('animationcomplete', () => {
         });
     }
